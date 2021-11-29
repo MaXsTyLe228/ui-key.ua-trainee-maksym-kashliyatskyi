@@ -4,10 +4,20 @@
       :header="title"
       bg-variant="light"
   >
-    <b-card v-for="card in cards" :title="card.title" class="card" :key="card.title">
+    <b-card v-for="card in cards" :sub-title="card.title" class="card" :key="card.title">
       {{ card.text }}
     </b-card>
-    <b-button variant="outline-secondary" class="addCard">+ add card</b-button>
+    <b-dropdown id="dropdown-offset" text="+ add card" class="menu">
+      <input
+          :value="cardName"
+          type="text"
+          class="inputColumn"
+          placeholder="card name"
+          @input="cardName = $event.target.value"
+      />
+      <b-button variant="primary" @click="addCard" class="addCard">Add card</b-button>
+    </b-dropdown>
+    <!--    <b-button variant="outline-secondary" class="addCard">+ add card</b-button>-->
   </b-card>
 </template>
 
@@ -19,12 +29,22 @@ export default {
   },
   data() {
     return {
-      cards: [
-        {title: "1", text: "some text"},
-        {title: "2", text: "some text"},
-        {title: "3", text: "some text"},
-      ]
+      cards: [],
+      cardName: '',
     }
+  },
+  methods: {
+    addCard() {
+      if (this.cardName) {
+        const card = this.cardName
+        this.cardName = '';
+        const newCard = {
+          title: card,
+          text: '',
+        };
+        return this.cards.push(newCard)
+      }
+    },
   }
 }
 </script>
@@ -42,7 +62,20 @@ export default {
   margin-bottom: 5px;
 }
 
-.addCard {
+.menu {
   width: 100%;
+}
+
+.inputColumn {
+  height: 40px;
+  width: 90%;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.addCard {
+  height: 40px;
+  width: 90%;
+  margin-left: 10px;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="content">
     <div class="board">
       <Column v-for="column in columns" :title="column.title" :key="column.title"/>
-      <b-dropdown id="dropdown-form" text="Dropdown with form" class="menu">
+      <b-dropdown id="dropdown-form" text="+ add column" class="menu">
         <input
             :value="columnName"
             type="text"
@@ -34,12 +34,14 @@ export default {
   },
   methods: {
     addColumn() {
-      const col = this.columnName
-      this.columnName = '';
-      const newColumn = {
-        title: col,
-      };
-      return this.columns.push(newColumn)
+      if (this.columnName) {
+        const col = this.columnName
+        this.columnName = '';
+        const newColumn = {
+          title: col,
+        };
+        return this.columns.push(newColumn)
+      }
     },
   }
 }
@@ -54,11 +56,13 @@ export default {
   flex-direction: row;
   overflow: auto;
 }
-.menu{
+
+.menu {
   height: 40px;
   max-width: 18rem;
   min-width: 18rem !important;
 }
+
 .inputColumn {
   height: 40px;
   width: 16rem;
