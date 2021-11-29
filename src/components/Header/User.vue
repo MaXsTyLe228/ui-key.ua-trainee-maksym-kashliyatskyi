@@ -16,7 +16,6 @@ export default {
 </script>
 
 <style>
-
 div {
   display: inline;
   margin-right: 10px;
