@@ -26,9 +26,7 @@ export default {
   },
   data() {
     return {
-      columns: [
-        {title: 'first'},
-      ],
+      columns: [],
       columnName: '',
     }
   },
@@ -53,6 +51,7 @@ export default {
   margin-left: 10px;
   display: flex;
   max-height: 88vh;
+  min-height: 50vh;
   flex-direction: row;
   overflow: auto;
 }

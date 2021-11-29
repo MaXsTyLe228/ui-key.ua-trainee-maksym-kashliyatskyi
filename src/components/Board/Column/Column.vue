@@ -4,9 +4,10 @@
       :header="title"
       bg-variant="light"
   >
-    <b-card v-for="card in cards" :sub-title="card.title" class="card" :key="card.title">
-      {{ card.text }}
-    </b-card>
+    <Card v-for="card in cards" :title="card.title" :key="card.title"/>
+    <!--    <b-card v-for="card in cards" :sub-title="card.title" class="card" :key="card.title">-->
+    <!--      {{ card.text }}-->
+    <!--    </b-card>-->
     <b-dropdown id="dropdown-offset" text="+ add card" class="menu">
       <input
           :value="cardName"
@@ -17,13 +18,17 @@
       />
       <b-button variant="primary" @click="addCard" class="addCard">Add card</b-button>
     </b-dropdown>
-    <!--    <b-button variant="outline-secondary" class="addCard">+ add card</b-button>-->
   </b-card>
 </template>
 
 <script>
+import Card from "./Card";
+
 export default {
   name: 'Column',
+  components: {
+    Card,
+  },
   props: {
     title: String,
   },
@@ -55,11 +60,6 @@ export default {
   max-width: 18rem;
   min-width: 18rem !important;
   overflow-y: auto;
-}
-
-.card {
-  width: 100%;
-  margin-bottom: 5px;
 }
 
 .menu {
