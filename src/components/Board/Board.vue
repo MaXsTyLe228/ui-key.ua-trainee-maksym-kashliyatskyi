@@ -1,7 +1,11 @@
 <template>
   <div class="content">
     <div class="board">
-      <Column v-for="column in columns" :title="column.title" :key="column.title"/>
+      <Column
+          v-for="column in columns"
+          :title="column.title"
+          :key="column.title"
+      />
       <b-dropdown id="dropdown-form" text="+ add column" class="menu">
         <input
             :value="columnName"
@@ -10,7 +14,12 @@
             placeholder="column name"
             @input="columnName = $event.target.value"
         />
-        <b-button variant="primary" @click="addColumn" class="addColumn">Add column</b-button>
+        <b-button
+            variant="primary"
+            @click="addColumn"
+            class="addColumn"
+        >Add column
+        </b-button>
       </b-dropdown>
     </div>
   </div>
@@ -50,7 +59,6 @@ export default {
   margin-top: 10px;
   margin-left: 10px;
   display: flex;
-  max-height: 88vh;
   min-height: 50vh;
   flex-direction: row;
   overflow: auto;

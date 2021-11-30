@@ -1,14 +1,23 @@
 <template>
   <b-card
       class="column"
-      :header="title"
       bg-variant="light"
   >
-    <Card v-for="card in cards" :title="card.title" :key="card.title"/>
-    <!--    <b-card v-for="card in cards" :sub-title="card.title" class="card" :key="card.title">-->
-    <!--      {{ card.text }}-->
-    <!--    </b-card>-->
-    <b-dropdown id="dropdown-offset" text="+ add card" class="menu">
+    <b-form-input
+        v-model="colName"
+        @input="colName = $event.target.value"
+        class="cardHeader"
+    />
+    <Card
+        v-for="card in cards"
+        :title="card.title"
+        :key="card.title"
+    />
+    <b-dropdown
+        id="dropdown-offset"
+        text="+ add card"
+        class="menu"
+    >
       <input
           :value="cardName"
           type="text"
@@ -16,7 +25,13 @@
           placeholder="card name"
           @input="cardName = $event.target.value"
       />
-      <b-button variant="primary" @click="addCard" class="addCard">Add card</b-button>
+      <b-button
+          variant="primary"
+          @click="addCard"
+          class="addCard"
+      >
+        Add card
+      </b-button>
     </b-dropdown>
   </b-card>
 </template>
@@ -36,6 +51,7 @@ export default {
     return {
       cards: [],
       cardName: '',
+      colName: this.title,
     }
   },
   methods: {
@@ -55,11 +71,42 @@ export default {
 </script>
 
 <style scoped>
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: black;
+}
+
+.cardHeader {
+  width: 16rem;
+  margin-bottom: 10px;
+  margin-top: -15px;
+  margin-left: -15px;
+  border-radius: 20px;
+  border: none;
+}
+
 .column {
+  height: fit-content;
   font-size: 1rem;
   max-width: 18rem;
+  max-height: 87vh;
   min-width: 18rem !important;
   overflow-y: auto;
+  scroll-snap-type: x proximity;
 }
 
 .menu {
