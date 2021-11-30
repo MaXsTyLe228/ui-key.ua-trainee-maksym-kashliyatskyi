@@ -5,7 +5,6 @@
   >
     <b-form-input
         v-model="colName"
-        @input="colName = $event.target.value"
         class="cardHeader"
     />
     <Card
@@ -13,26 +12,19 @@
         :title="card.title"
         :key="card.title"
     />
-    <b-dropdown
-        id="dropdown-offset"
-        text="+ add card"
-        class="menu"
+    <b-button
+        variant="light"
+        class="addCard"
+        @click="addCard"
     >
-      <input
-          :value="cardName"
-          type="text"
-          class="inputColumn"
-          placeholder="card name"
-          @input="cardName = $event.target.value"
-      />
-      <b-button
-          variant="primary"
-          @click="addCard"
-          class="addCard"
-      >
-        Add card
-      </b-button>
-    </b-dropdown>
+      + Add Card
+    </b-button>
+    <b-form-input
+        v-if="showInput"
+        v-model="cardName"
+        class="inputColumn"
+        placeholder="Enter title for new Card"
+    />
   </b-card>
 </template>
 
@@ -52,10 +44,12 @@ export default {
       cards: [],
       cardName: '',
       colName: this.title,
+      showInput: false,
     }
   },
   methods: {
     addCard() {
+      this.showInput = !this.showInput
       if (this.cardName) {
         const card = this.cardName
         this.cardName = '';
@@ -107,22 +101,22 @@ export default {
   min-width: 18rem !important;
   overflow-y: auto;
   scroll-snap-type: x proximity;
+  border-radius: 20px;
 }
 
-.menu {
-  width: 100%;
-}
 
 .inputColumn {
+  border-radius: 20px;
   height: 40px;
-  width: 90%;
-  margin-left: 10px;
-  margin-bottom: 5px;
+  margin-top: 10px;
+  width: 16rem;
+  margin-left: -15px;
 }
 
 .addCard {
+  border-radius: 20px;
   height: 40px;
-  width: 90%;
-  margin-left: 10px;
+  width: 16rem;
+  margin-left: -15px;
 }
 </style>
