@@ -2,10 +2,25 @@
   <b-card
       class="card"
   >
-    <b-form-input
-        v-model="cardName"
-        class="cardName"
-    />
+    <div class="cardHeader">
+      <b-form-input
+          v-model="cardName"
+          class="cardName"
+          placeholder="Card"
+      />
+      <b-button
+          variant="outline-secondary"
+          class="iconButton"
+          @click="$emit('remove',id)"
+      >
+        <b-icon-trash
+            shift-h="-3"
+            scale="0.8"
+            class="icon"
+        />
+      </b-button>
+
+    </div>
     <b-form-textarea
         class="textArea"
         placeholder="description"
@@ -23,6 +38,7 @@
 export default {
   name: 'Card',
   props: {
+    id: Number,
     title: String,
   },
   data() {
@@ -42,7 +58,7 @@ export default {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: white;
+  background: none;
 }
 
 /* Handle */
@@ -55,7 +71,7 @@ export default {
   background: black;
 }
 
-.cardName{
+.cardName {
   width: 14rem;
   margin-bottom: 10px;
   margin-top: -15px;
@@ -64,12 +80,26 @@ export default {
   border: none;
 }
 
+.iconButton {
+  border: none;
+  height: 35px;
+  width: 35px;
+  margin-top: -14px;
+  margin-right: -10px;
+  border-radius: 20px;
+}
+
 .textArea {
   border-radius: 20px;
   width: 15.5rem;
   font-size: 14px;
   margin-left: -16px;
   margin-bottom: -16px;
+}
+
+.cardHeader {
+  width: 14rem;
+  display: flex;
 }
 
 .card {
