@@ -1,8 +1,8 @@
 <template>
-  <b-navbar toggleable="lg" variant="dark">
+  <b-navbar class="header" toggleable="lg" variant="dark">
     <b-navbar-nav class="ml-auto">
       <User :username="username" :avatar="avatar"/>
-      <b-button size="3rem" class="my-2 my-sm-0" variant="dark" @click="authorization">{{ status }}</b-button>
+      <b-button class="my-2 my-sm-0" variant="dark" @click="authorization">{{ status }}</b-button>
     </b-navbar-nav>
   </b-navbar>
 </template>

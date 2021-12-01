@@ -1,17 +1,17 @@
 import VueRouter from 'vue-router'
-import Trello from "../components/Trello";
-import Main from "../components/Main";
+import Trello from "../Pages/Trello";
 
 export default new VueRouter({
     mode: 'history',
     routes: [
         {
-            path: '/',
-            component: Main
+            path: '/trello-page',
+            name: 'trello',
+            component: Trello
         },
         {
-            path: '/trello-page',
-            component: Trello
+            path: '*',
+            redirect: {name: 'trello'}
         },
     ]
 })
