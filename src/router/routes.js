@@ -4,7 +4,6 @@ import Trello from "../Pages/Trello";
 export default new VueRouter({
     mode: 'history',
     routes: [
-
         {
             path: '/trello-page',
             name: 'trello',
