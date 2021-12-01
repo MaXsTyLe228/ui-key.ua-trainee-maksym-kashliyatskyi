@@ -1,15 +1,35 @@
 <template>
-  <b-card :sub-title="title" class="card">
+  <b-card
+      class="card"
+  >
+    <div class="cardHeader">
+      <b-form-input
+          v-model="cardName"
+          class="cardName"
+          placeholder="Card"
+      />
+      <b-button
+          variant="outline-secondary"
+          class="iconButton"
+          @click="$emit('remove',id)"
+      >
+        <b-icon-trash
+            shift-h="-3"
+            scale="0.8"
+            class="icon"
+        />
+      </b-button>
+
+    </div>
     <b-form-textarea
         class="textArea"
         placeholder="description"
         rows="3"
         max-rows="10"
-        :value="text"
-        v-model="text"
-        @input="text = $event.target.value"
+        :value="description"
+        v-model="description"
     >
-      {{ text }}
+      {{ description }}
     </b-form-textarea>
   </b-card>
 </template>
@@ -18,26 +38,73 @@
 export default {
   name: 'Card',
   props: {
+    id: Number,
     title: String,
   },
   data() {
     return {
-      text: '',
+      description: '',
+      cardName: this.title,
     }
   }
 }
 </script>
 
 <style scoped>
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: black;
+}
+
+.cardName {
+  width: 14rem;
+  margin-bottom: 10px;
+  margin-top: -15px;
+  margin-left: -15px;
+  border-radius: 20px;
+  border: none;
+}
+
+.iconButton {
+  border: none;
+  height: 35px;
+  width: 35px;
+  margin-top: -14px;
+  margin-right: -10px;
+  border-radius: 20px;
+}
+
 .textArea {
-  width: 16.5rem;
+  border-radius: 20px;
+  width: 15.5rem;
   font-size: 14px;
   margin-left: -16px;
   margin-bottom: -16px;
 }
 
+.cardHeader {
+  width: 14rem;
+  display: flex;
+}
+
 .card {
-  width: 17rem;
+  border-radius: 20px;
+  width: 16rem;
   margin-bottom: 5px;
   margin-left: -14px;
 }
