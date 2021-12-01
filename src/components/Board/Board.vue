@@ -4,21 +4,32 @@
       <Column
           v-for="column in columns"
           :title="column.title"
-          :key="column.title"
+          :id="column.id"
+          :key="column.id"
+          @remove="removeCol"
       />
       <div class="addColContainer">
         <b-button
+            v-if="!showInput"
             variant="light"
             class="addColumn"
             @click="addColumn"
         >
-          + Add Card
+          + Add Column
+        </b-button>
+        <b-button
+            v-if="showInput"
+            variant="primary"
+            class="addColumn"
+            @click="addColumn"
+        >
+          + Add Column
         </b-button>
         <b-form-input
             v-if="showInput"
             v-model="columnName"
             class="inputColumn"
-            placeholder="Enter title for new Card"
+            placeholder="Enter title for new Column"
         />
       </div>
     </div>
@@ -47,11 +58,15 @@ export default {
         const col = this.columnName
         this.columnName = '';
         const newColumn = {
+          id: Date.now(),
           title: col,
         };
         return this.columns.push(newColumn)
       }
     },
+    removeCol(id) {
+      this.columns = this.columns.filter(col => col.id !== id)
+    }
   }
 }
 </script>

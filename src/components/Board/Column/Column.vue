@@ -3,17 +3,38 @@
       class="column"
       bg-variant="light"
   >
-    <b-form-input
-        v-model="colName"
-        class="cardHeader"
-    />
+    <div class="cardHeader">
+      <b-form-input
+          v-model="colName"
+          placeholder="Column"
+          class="colName"
+      />
+      <b-button
+          variant="outline-secondary"
+          class="iconButton"
+          @click="$emit('remove',id)"
+      >
+        <b-icon-trash/>
+      </b-button>
+    </div>
     <Card
         v-for="card in cards"
         :title="card.title"
-        :key="card.title"
+        :id="card.id"
+        :key="card.id"
+        @remove="removeCard"
     />
     <b-button
+        v-if="!showInput"
         variant="light"
+        class="addCard"
+        @click="addCard"
+    >
+      + Add Card
+    </b-button>
+    <b-button
+        v-if="showInput"
+        variant="primary"
         class="addCard"
         @click="addCard"
     >
@@ -37,6 +58,7 @@ export default {
     Card,
   },
   props: {
+    id: Number,
     title: String,
   },
   data() {
@@ -54,12 +76,15 @@ export default {
         const card = this.cardName
         this.cardName = '';
         const newCard = {
+          id: Date.now(),
           title: card,
-          text: '',
         };
         return this.cards.push(newCard)
       }
     },
+    removeCard(id) {
+      this.cards = this.cards.filter(card => card.id !== id)
+    }
   }
 }
 </script>
@@ -86,6 +111,20 @@ export default {
 
 .cardHeader {
   width: 16rem;
+  display: flex;
+}
+
+.iconButton {
+  border: none;
+  height: 42px;
+  width: 42px;
+  margin-top: -14px;
+  margin-right: -10px;
+  border-radius: 20px;
+}
+
+.colName {
+  width: 15rem;
   margin-bottom: 10px;
   margin-top: -15px;
   margin-left: -15px;
