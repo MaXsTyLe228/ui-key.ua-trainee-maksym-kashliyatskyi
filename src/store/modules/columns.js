@@ -9,15 +9,22 @@ export default {
         createCol(context, params) {
             axios.post('http://localhost:3000/dev' + '/createColumn',
                 JSON.stringify(params))
-                .then(res => context.commit('addCol', res))
+                .then(() => {
+                    context.commit('addCol',
+                        {
+                            id: params.id,
+                            title: params.title,
+                            index: params.index,
+                        })
+                })
         },
         deleteCol(context, id) {
-            console.log(id)
             axios.delete('http://localhost:3000/dev' + '/deleteCol/' + id)
-                .then(res => context.commit('deleteCol', res))
+                .then(() => {
+                    context.commit('deleteCol', id)
+                })
         },
         updateCol(context, params) {
-            //console.log(params)
             const body = {
                 title: params.title,
                 index: params.index
@@ -25,7 +32,6 @@ export default {
             axios.put('http://localhost:3000/dev' + '/updateCol/' + params.id,
                 JSON.stringify(body))
                 .then(res => {
-                    //console.log(JSON.stringify(body))
                     context.commit('updateCol', res.data.Attributes)
                 })
         },
@@ -34,21 +40,21 @@ export default {
     mutations: {
         getCols(state, cols) {
             state.columns = cols;
-            console.log(state.columns)
+            //console.log(state.columns)
         },
         addCol(state, col) {
             state.columns.push(col)
-            console.log(state.columns)
+            //console.log(state.columns)
         },
         deleteCol(state, id) {
             state.columns = state.columns.filter(col => col.id !== id)
-            console.log(state.columns)
+            //console.log(state.columns)
         },
         updateCol(state, params) {
             let updatedCol = state.columns.findIndex(item => item.id === params.id);
             state.columns[updatedCol].title = params.title;
             state.columns[updatedCol].index = params.index;
-            console.log(state.columns)
+            //console.log(state.columns)
         }
     },
 
@@ -62,6 +68,14 @@ export default {
         },
         colsLength(state) {
             return state.columns.length
+        },
+        getMaxOfArray(state) {
+            let max = 0;
+            for (let i in state.columns) {
+                if (state.columns[i].index > max)
+                    max = state.columns[i].index
+            }
+            return max + 1;
         }
     },
 }

@@ -80,11 +80,9 @@ export default {
         title: this.colName,
         index: this.index
       })
-      await this.fetchCols()
     },
     async del(){
       await this.deleteCol(this.id)
-      await this.fetchCols()
     },
     addCard() {
       this.showInput = !this.showInput

@@ -45,13 +45,10 @@ export default {
   components: {
     Column
   },
-  computed: {...mapGetters(["allCol", 'colsLength'])},
-  async mounted() {
+  computed: {...mapGetters(["allCol", 'colsLength', 'getMaxOfArray'])},
+  async beforeMount() {
     await this.fetchCols()
-  },/*
-  async beforeUpdate() {
-    await this.fetchCols()
-  },*/
+  },
   data() {
     return {
       showInput: false,
@@ -66,8 +63,11 @@ export default {
         const col = this.columnName;
         this.columnName = '';
         await this.createCol(
-            {title: col, index: this.colsLength + 1,});
-        await this.fetchCols()
+            {
+              id: Date.now(),
+              title: col,
+              index: this.getMaxOfArray,
+            });
       }
     },
   }
