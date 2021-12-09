@@ -6,6 +6,7 @@
     <div class="cardHeader">
       <b-form-input
           v-model="colName"
+          @blur="update"
           placeholder="Column"
           class="colName"
       />
@@ -60,6 +61,7 @@ export default {
   },
   props: {
     id: Number,
+    index: Number,
     title: String,
   },
   data() {
@@ -71,7 +73,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['deleteCol']),
+    ...mapActions(['deleteCol', 'updateCol']),
+    async update() {
+      await this.updateCol({
+        id: this.id,
+        title: this.colName,
+        index: this.index
+      })
+    },
     addCard() {
       this.showInput = !this.showInput
       if (this.cardName) {
@@ -83,7 +92,8 @@ export default {
         };
         return this.cards.push(newCard)
       }
-    },
+    }
+    ,
     removeCard(id) {
       this.cards = this.cards.filter(card => card.id !== id)
     }

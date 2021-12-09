@@ -4,9 +4,9 @@
       <Column
           v-for="column in allCol"
           :title="column.title"
+          :index="column.index"
           :id="column.id"
           :key="column.index"
-          @remove="removeCol"
       />
       <div class="addColContainer">
         <b-button
@@ -49,7 +49,7 @@ export default {
   async mounted() {
     await this.fetchCols()
   },
-  async updated() {
+  async beforeUpdate() {
     await this.fetchCols()
   },
   data() {
@@ -60,12 +60,13 @@ export default {
   },
   methods: {
     ...mapActions(['fetchCols', 'createCol']),
-    async addColumn() {
+      async addColumn() {
       this.showInput = !this.showInput
       if (this.columnName) {
         const col = this.columnName;
         this.columnName = '';
-        await this.createCol({title: col, index: this.colsLength + 1,});
+        await this.createCol(
+            {title: col, index: this.colsLength + 1,});
       }
     },
     removeCol(id) {
