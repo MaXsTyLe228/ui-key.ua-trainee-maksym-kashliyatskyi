@@ -48,10 +48,10 @@ export default {
   computed: {...mapGetters(["allCol", 'colsLength'])},
   async mounted() {
     await this.fetchCols()
-  },
+  },/*
   async beforeUpdate() {
     await this.fetchCols()
-  },
+  },*/
   data() {
     return {
       showInput: false,
@@ -60,18 +60,16 @@ export default {
   },
   methods: {
     ...mapActions(['fetchCols', 'createCol']),
-      async addColumn() {
+    async addColumn() {
       this.showInput = !this.showInput
       if (this.columnName) {
         const col = this.columnName;
         this.columnName = '';
         await this.createCol(
             {title: col, index: this.colsLength + 1,});
+        await this.fetchCols()
       }
     },
-    removeCol(id) {
-      this.columns = this.columns.filter(col => col.id !== id)
-    }
   }
 }
 </script>

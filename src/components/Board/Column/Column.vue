@@ -13,7 +13,7 @@
       <b-button
           variant="outline-secondary"
           class="iconButton"
-          @click="deleteCol(id)"
+          @click="del"
       >
         <b-icon-trash/>
       </b-button>
@@ -73,13 +73,18 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['deleteCol', 'updateCol']),
+    ...mapActions(['deleteCol', 'updateCol', 'fetchCols']),
     async update() {
       await this.updateCol({
         id: this.id,
         title: this.colName,
         index: this.index
       })
+      await this.fetchCols()
+    },
+    async del(){
+      await this.deleteCol(this.id)
+      await this.fetchCols()
     },
     addCard() {
       this.showInput = !this.showInput
