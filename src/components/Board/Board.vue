@@ -42,10 +42,11 @@ import {mapGetters, mapActions} from 'vuex';
 
 export default {
   name: 'Board',
-  components: {
-    Column
+  components: {Column},
+  computed: {
+    ...mapGetters(["allCol",
+      'colsLength', 'getMaxOfArray'])
   },
-  computed: {...mapGetters(["allCol", 'colsLength', 'getMaxOfArray'])},
   async beforeMount() {
     await this.fetchCols()
   },

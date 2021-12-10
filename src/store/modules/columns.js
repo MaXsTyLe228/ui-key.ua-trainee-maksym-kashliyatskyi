@@ -1,13 +1,14 @@
 import axios from "axios";
+import {PATH} from "../consts";
 
 export default {
     actions: {
         fetchCols(context) {
-            axios.get('http://localhost:3000/dev' + '/columns')
+            axios.get(PATH + '/columns')
                 .then(res => context.commit('getCols', res.data.Items));
         },
         createCol(context, params) {
-            axios.post('http://localhost:3000/dev' + '/createColumn',
+            axios.post(PATH + '/createColumn',
                 JSON.stringify(params))
                 .then(() => {
                     context.commit('addCol',
@@ -19,7 +20,7 @@ export default {
                 })
         },
         deleteCol(context, id) {
-            axios.delete('http://localhost:3000/dev' + '/deleteCol/' + id)
+            axios.delete(PATH + '/deleteCol/' + id)
                 .then(() => {
                     context.commit('deleteCol', id)
                 })
@@ -29,7 +30,7 @@ export default {
                 title: params.title,
                 index: params.index
             }
-            axios.put('http://localhost:3000/dev' + '/updateCol/' + params.id,
+            axios.put(PATH + '/updateCol/' + params.id,
                 JSON.stringify(body))
                 .then(res => {
                     context.commit('updateCol', res.data.Attributes)

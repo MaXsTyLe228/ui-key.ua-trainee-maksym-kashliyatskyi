@@ -7,11 +7,12 @@
           v-model="cardName"
           class="cardName"
           placeholder="Card"
+          @blur="update"
       />
       <b-button
           variant="outline-secondary"
           class="iconButton"
-          @click="$emit('remove',id)"
+          @click="del"
       >
         <b-icon-trash
             shift-h="-3"
@@ -26,6 +27,7 @@
         placeholder="description"
         rows="3"
         max-rows="10"
+        @blur="update"
         :value="description"
         v-model="description"
     >
@@ -35,17 +37,36 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
+
 export default {
   name: 'Card',
   props: {
     id: Number,
     title: String,
+    index: Number,
+    idCol: Number,
   },
   data() {
     return {
       description: '',
       cardName: this.title,
     }
+  },
+  methods: {
+    ...mapActions(['deleteCard', 'updateCard']),
+    async del() {
+      await this.deleteCard(this.id)
+    },
+    async update() {
+      await this.updateCard({
+        id: this.id,
+        title: this.cardName,
+        index: this.index,
+        description: this.description,
+        idCol: this.idCol,
+      })
+    },
   }
 }
 </script>

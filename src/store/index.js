@@ -6,11 +6,6 @@ import cards from './modules/cards'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-    // actions: {},
-    // mutations: {},
-    // state: {},
-    // getters: {},
-
     modules: {
         columns,
         cards
