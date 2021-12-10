@@ -41,21 +41,17 @@ export default {
     mutations: {
         getCols(state, cols) {
             state.columns = cols;
-            //console.log(state.columns)
         },
         addCol(state, col) {
             state.columns.push(col)
-            //console.log(state.columns)
         },
         deleteCol(state, id) {
             state.columns = state.columns.filter(col => col.id !== id)
-            //console.log(state.columns)
         },
         updateCol(state, params) {
             let updatedCol = state.columns.findIndex(item => item.id === params.id);
             state.columns[updatedCol].title = params.title;
             state.columns[updatedCol].index = params.index;
-            //console.log(state.columns)
         }
     },
 
@@ -66,11 +62,19 @@ export default {
     getters: {
         allCol(state) {
             return state.columns
+                .sort((a, b) => {
+                    if (a.index > b.index)
+                        return 1;
+                    if (a.index < b.index)
+                        return -1;
+                    // a должно быть равным b
+                    return 0;
+                });
         },
         colsLength(state) {
             return state.columns.length
         },
-        getMaxOfArray(state) {
+        newColIndex(state) {
             let max = 0;
             for (let i in state.columns) {
                 if (state.columns[i].index > max)

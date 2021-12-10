@@ -2,7 +2,7 @@
   <div class="content">
     <div class="board">
       <Column
-          v-for="column in allCol"
+          v-for="column in this.allCol"
           :title="column.title"
           :index="column.index"
           :id="column.id"
@@ -45,7 +45,7 @@ export default {
   components: {Column},
   computed: {
     ...mapGetters(["allCol",
-      'colsLength', 'getMaxOfArray'])
+      'colsLength', 'newColIndex'])
   },
   async beforeMount() {
     await this.fetchCols()
@@ -67,7 +67,7 @@ export default {
             {
               id: Date.now(),
               title: col,
-              index: this.getMaxOfArray,
+              index: this.newColIndex,
             });
       }
     },

@@ -1,7 +1,5 @@
 <template>
-  <b-card
-      class="card"
-  >
+  <b-card class="card">
     <div class="cardHeader">
       <b-form-input
           v-model="cardName"
@@ -20,7 +18,6 @@
             class="icon"
         />
       </b-button>
-
     </div>
     <b-form-textarea
         class="textArea"
@@ -43,13 +40,14 @@ export default {
   name: 'Card',
   props: {
     id: Number,
+    cardDescription: String,
     title: String,
     index: Number,
     idCol: Number,
   },
   data() {
     return {
-      description: '',
+      description: this.cardDescription,
       cardName: this.title,
     }
   },

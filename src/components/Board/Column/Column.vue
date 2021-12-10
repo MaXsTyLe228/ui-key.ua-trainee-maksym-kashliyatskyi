@@ -19,13 +19,21 @@
       </b-button>
     </div>
     <Card
-        v-for="card in getTodoById"
+        v-for="card in this.getCardsById(this.id)
+        .sort((a, b) => {
+                if (a.index > b.index)
+                    return 1;
+                if (a.index < b.index)
+                    return -1;
+                // a должно быть равным b
+                return 0;
+            })"
         :title="card.title"
         :id="card.id"
         :key="card.id"
+        :cardDescription="card.description"
         :index="card.index"
         :idCol="card.idCol"
-        @remove="removeCard"
     />
     <b-button
         v-if="!showInput"
@@ -67,14 +75,10 @@ export default {
     title: String,
   },
   computed: {
-    ...mapGetters(['allCards', 'newCardIndex',])
+    ...mapGetters(['allCards', 'newCardIndex', 'getCardsById'])
   },
   async beforeMount() {
     await this.fetchCards()
-
-  },
-  async mounted() {
-    await this.filter()
   },
   data() {
     return {
@@ -86,14 +90,7 @@ export default {
   },
   methods: {
     ...mapActions(['deleteCol', 'updateCol',
-      'fetchCards', 'createCard', 'filterCards']),
-    filter() {
-      console.log(this.allCards)
-      for (let i in this.allCards) {
-        if (this.allCards[i].idCol == this.id)
-          this.cards.push(this.allCards[i])
-      }
-    },
+      'fetchCards', 'createCard']),
     async update() {
       await this.updateCol({
         id: this.id,
@@ -116,14 +113,9 @@ export default {
           description: '',
           idCol: this.id,
         };
-        this.filter()
         return this.createCard(newCard)
       }
-    }
-    ,
-    removeCard(id) {
-      this.cards = this.cards.filter(card => card.id !== id)
-    }
+    },
   }
 }
 </script>
