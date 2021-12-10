@@ -3,9 +3,8 @@ import axios from "axios";
 export default {
     actions: {
         fetchCols(context) {
-            axios.get('http://localhost:3000/dev' + '/columns').then(res =>
-                context.commit('getCols', res.data.Items)
-            );
+            axios.get('http://localhost:3000/dev' + '/columns')
+                .then(res => context.commit('getCols', res.data.Items));
         },
         createCol(context, params) {
             axios.post('http://localhost:3000/dev' + '/createColumn',
@@ -13,12 +12,13 @@ export default {
                 .then(res => context.commit('addCol', res))
         },
         deleteCol(context, id) {
+            console.log(id)
             axios.delete('http://localhost:3000/dev' + '/deleteCol/' + id)
                 .then(res => context.commit('deleteCol', res))
         },
         updateCol(context, params) {
             //console.log(params)
-            const body={
+            const body = {
                 title: params.title,
                 index: params.index
             }
