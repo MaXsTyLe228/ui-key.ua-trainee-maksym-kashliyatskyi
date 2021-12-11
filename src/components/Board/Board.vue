@@ -1,13 +1,15 @@
 <template>
   <div class="content">
     <div class="board">
-      <Column
-          v-for="column in this.allCol"
-          :title="column.title"
-          :index="column.index"
-          :id="column.id"
-          :key="column.index"
-      />
+      <draggable style="display: flex;">
+        <Column
+            v-for="column in this.allCol"
+            :title="column.title"
+            :index="column.index"
+            :id="column.id"
+            :key="column.index"
+        />
+      </draggable>
       <div class="addColContainer">
         <b-button
             v-if="!showInput"
@@ -39,10 +41,11 @@
 <script>
 import Column from "./Column/Column";
 import {mapGetters, mapActions} from 'vuex';
+import draggable from "vuedraggable";
 
 export default {
   name: 'Board',
-  components: {Column},
+  components: {Column, draggable},
   computed: {
     ...mapGetters(["allCol",
       'colsLength', 'newColIndex'])

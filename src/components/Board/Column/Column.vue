@@ -18,23 +18,25 @@
         <b-icon-trash/>
       </b-button>
     </div>
-    <Card
-        v-for="card in this.getCardsById(this.id)
-        .sort((a, b) => {
-                if (a.index > b.index)
-                    return 1;
-                if (a.index < b.index)
-                    return -1;
-                // a должно быть равным b
-                return 0;
-            })"
-        :title="card.title"
-        :id="card.id"
-        :key="card.id"
-        :cardDescription="card.description"
-        :index="card.index"
-        :idCol="card.idCol"
-    />
+    <draggable class="drag" group="tasks">
+      <Card
+          v-for="card in this.getCardsById(this.id)
+          .sort((a, b) => {
+              if (a.index > b.index)
+                  return 1;
+              if (a.index < b.index)
+                  return -1;
+              // a должно быть равным b
+              return 0;
+          })"
+          :title="card.title"
+          :id="card.id"
+          :key="card.id"
+          :cardDescription="card.description"
+          :index="card.index"
+          :idCol="card.idCol"
+      />
+    </draggable>
     <b-button
         v-if="!showInput"
         variant="light"
@@ -63,12 +65,11 @@
 <script>
 import Card from "./Card";
 import {mapActions, mapGetters} from 'vuex';
+import draggable from "vuedraggable";
 
 export default {
   name: 'Column',
-  components: {
-    Card,
-  },
+  components: {Card, draggable},
   props: {
     id: Number,
     index: Number,
@@ -138,6 +139,11 @@ export default {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: black;
+}
+
+.drag {
+  min-height: 300px;
+  min-width: 16rem;
 }
 
 .cardHeader {
