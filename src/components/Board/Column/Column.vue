@@ -2,6 +2,7 @@
   <b-card
       class="column"
       bg-variant="light"
+      @dragstart="ad"
   >
     <div class="cardHeader">
       <b-form-input
@@ -18,7 +19,10 @@
         <b-icon-trash/>
       </b-button>
     </div>
-    <draggable class="drag" group="tasks">
+    <draggable
+        class="drag"
+        v-bind="dragOptions"
+    >
       <Card
           v-for="card in this.getCardsById(this.id)
           .sort((a, b) => {
@@ -76,7 +80,16 @@ export default {
     title: String,
   },
   computed: {
-    ...mapGetters(['allCards', 'newCardIndex', 'getCardsById'])
+    ...mapGetters(['allCards', 'newCardIndex',
+      'getCardsById']),
+    dragOptions() {
+      return {
+        animation: 0,
+        group: "cards",
+        disabled: !this.editable,
+        ghostClass: "ghost"
+      };
+    },
   },
   async beforeMount() {
     await this.fetchCards()
@@ -87,6 +100,7 @@ export default {
       cardName: '',
       colName: this.title,
       showInput: false,
+      editable: true,
     }
   },
   methods: {
@@ -117,6 +131,15 @@ export default {
         return this.createCard(newCard)
       }
     },
+    ad() {
+      const info = {
+        id: this.id,
+        title: this.colName,
+        index: this.index
+      }
+      //console.log(info)
+      this.$emit('getDropped', info)
+    },
   }
 }
 </script>
@@ -142,8 +165,9 @@ export default {
 }
 
 .drag {
-  min-height: 300px;
-  min-width: 16rem;
+  margin-left: -15px;
+  min-height: 50px;
+  width: 17rem;
 }
 
 .cardHeader {
@@ -161,7 +185,7 @@ export default {
 }
 
 .colName {
-  width: 15rem;
+  width: 16rem;
   margin-bottom: 10px;
   margin-top: -15px;
   margin-left: -15px;
@@ -170,6 +194,7 @@ export default {
 }
 
 .column {
+  display: flex;
   height: fit-content;
   font-size: 1rem;
   max-width: 18rem;
@@ -180,19 +205,22 @@ export default {
   border-radius: 20px;
 }
 
+.ghost {
+  opacity: 0;
+}
 
 .inputColumn {
   border-radius: 20px;
   height: 40px;
   margin-top: 10px;
-  width: 16rem;
+  width: 17rem;
   margin-left: -15px;
 }
 
 .addCard {
   border-radius: 20px;
   height: 40px;
-  width: 16rem;
+  width: 17rem;
   margin-left: -15px;
 }
 </style>

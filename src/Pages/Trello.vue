@@ -1,5 +1,5 @@
 <template>
-  <div id="trello">
+  <div class="trello">
     <Header/>
     <Board/>
   </div>
@@ -17,3 +17,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.trello{
+  margin-right: 10px;
+}
+</style>

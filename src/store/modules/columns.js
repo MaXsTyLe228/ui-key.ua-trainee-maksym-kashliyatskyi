@@ -71,8 +71,12 @@ export default {
                     return 0;
                 });
         },
-        colsLength(state) {
-            return state.columns.length
+        allIndexes(state){
+            let indexCols =[];
+            for (let i in state.columns){
+                indexCols.push(state.columns[i].index)
+            }
+            return indexCols
         },
         newColIndex(state) {
             let max = 0;
