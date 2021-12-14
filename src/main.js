@@ -1,3 +1,4 @@
+
 import Vue from 'vue'
 import App from './App.vue'
 import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
