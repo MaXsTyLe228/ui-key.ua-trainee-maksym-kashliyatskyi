@@ -3,6 +3,7 @@
       class="column"
       bg-variant="light"
       @dragstart="sendInfo"
+      @dragend="newIdCol"
   >
     <div class="cardHeader">
       <b-form-input
@@ -20,6 +21,7 @@
       </b-button>
     </div>
     <draggable
+        valid-v-model="getCardsById(this.id)"
         @end="moveCard"
         class="drag"
         v-bind="dragOptions"
@@ -143,12 +145,14 @@ export default {
       this.$emit('getDropped', info)
     },
     dropped(data) {
-      this.changedCard = data
-      //console.log(data)
+      this.changedCard = {...data}
+      console.log(this.changedCard.idCol)
     },
-    moveCard(data){
-      console.log(data.from)
-      console.log(data.to)
+    moveCard(){
+      //console.log(this.id)
+    },
+    newIdCol(){
+      this.changedCard.idCol = this.id
     }
   }
 }

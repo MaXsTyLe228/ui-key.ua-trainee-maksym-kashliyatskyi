@@ -115,7 +115,6 @@ export default {
     },
     dropped(data) {
       this.changedCol = data
-      //console.log(this.changedCol)
     },
   }
 }
