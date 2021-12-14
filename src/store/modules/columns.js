@@ -33,6 +33,7 @@ export default {
             axios.put(PATH + '/updateCol/' + params.id,
                 JSON.stringify(body))
                 .then(res => {
+                    //console.log('asd')
                     context.commit('updateCol', res.data.Attributes)
                 })
         },
@@ -63,28 +64,38 @@ export default {
         allCol(state) {
             return state.columns
                 .sort((a, b) => {
-                    if (a.index > b.index)
+                    if (+a.index > +b.index)
                         return 1;
-                    if (a.index < b.index)
+                    if (+a.index < +b.index)
                         return -1;
                     // a должно быть равным b
                     return 0;
                 });
         },
-        allIndexes(state){
-            let indexCols =[];
-            for (let i in state.columns){
+        allIndexes(state) {
+            let indexCols = [];
+            for (let i in state.columns) {
                 indexCols.push(state.columns[i].index)
             }
             return indexCols
         },
-        newColIndex(state) {
-            let max = 0;
+        minColIndex(state) {
+            let min = +state.columns[0].index;
             for (let i in state.columns) {
-                if (state.columns[i].index > max)
-                    max = state.columns[i].index
+                if (+state.columns[i].index < min)
+                    min = +state.columns[i].index
             }
-            return max + 1;
+            return min;
+        },
+        newColIndex(state) {
+            if (state.columns.length === 0)
+                return 0.00001
+            let max = +state.columns[0].index;
+            for (let i in state.columns) {
+                if (+state.columns[i].index > max)
+                    max = +state.columns[i].index
+            }
+            return max + 0.00001;
         }
     },
 }

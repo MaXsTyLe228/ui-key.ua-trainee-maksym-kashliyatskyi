@@ -70,12 +70,14 @@ export default {
             return state.cards.filter(card => card.idCol === idCol);
         },
         newCardIndex(state) {
-            let max = 0;
+            if (state.cards.length === 0)
+                return 0.00001
+            let max = +state.cards[0].index;
             for (let i in state.cards) {
-                if (state.cards[i].index > max)
-                    max = state.cards[i].index
+                if (+state.cards[i].index > max)
+                    max = +state.cards[i].index
             }
-            return max + 1;
+            return max + 0.00001;
         }
     },
 }

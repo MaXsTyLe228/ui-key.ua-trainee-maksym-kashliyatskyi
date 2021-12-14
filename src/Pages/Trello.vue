@@ -19,7 +19,4 @@ export default {
 </script>
 
 <style scoped>
-.trello{
-  margin-right: 10px;
-}
 </style>

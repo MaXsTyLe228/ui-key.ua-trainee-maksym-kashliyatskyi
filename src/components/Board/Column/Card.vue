@@ -1,5 +1,5 @@
 <template>
-  <b-card class="card">
+  <b-card class="card" @dragstart="sendInfo">
     <div class="cardHeader">
       <b-form-input
           v-model="cardName"
@@ -42,7 +42,7 @@ export default {
     id: Number,
     cardDescription: String,
     title: String,
-    index: Number,
+    index: String,
     idCol: Number,
   },
   data() {
@@ -64,6 +64,17 @@ export default {
         description: this.description,
         idCol: this.idCol,
       })
+    },
+    sendInfo() {
+      const info = {
+        id: this.id,
+        description: this.description,
+        index: this.index,
+        title: this.title,
+        idCol: this.idCol,
+      }
+      console.log(info)
+      this.$emit('cardDrop', info)
     },
   }
 }

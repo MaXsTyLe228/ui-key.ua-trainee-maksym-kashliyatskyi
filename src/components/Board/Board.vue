@@ -5,7 +5,7 @@
       <draggable
           style="display: flex;"
           v-bind="dragOptions"
-          @end="array_move"
+          @end="moveCol"
       >
         <Column
             @getDropped="dropped"
@@ -53,7 +53,8 @@ export default {
   name: 'Board',
   components: {Column, draggable},
   computed: {
-    ...mapGetters(["allCol", 'newColIndex', 'allIndexes']),
+    ...mapGetters(['allCol', 'newColIndex', 'allIndexes',
+      'minColIndex']),
     dragOptions() {
       return {
         animation: 0,
@@ -76,7 +77,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchCols', 'createCol']),
+    ...mapActions(['fetchCols', 'createCol', 'updateCol']),
     async addColumn() {
       this.showInput = !this.showInput
       if (this.columnName) {
@@ -86,31 +87,35 @@ export default {
             {
               id: Date.now(),
               title: col,
-              index: this.newColIndex,
+              index: this.newColIndex + "",
             });
       }
     },
-    array_move(data) {
-      if (data.newIndex >= this.cols.length) {
-        let k = data.newIndex - this.cols.length + 1;
-        while (k--) {
-          this.cols.push(undefined);
+    async moveCol(data) {
+      const newPlace = data.newIndex;
+      const oldPlace = data.oldIndex;
+      if (newPlace !== oldPlace) {
+        let int;
+        if (newPlace === 0) {
+          int = this.minColIndex / 2
+        } else if (newPlace === this.allCol.length - 1) {
+          int = this.newColIndex
+        } else if (newPlace < oldPlace) {
+          int = (+this.allCol[newPlace - 1].index + +this.allCol[newPlace].index) / 2
+        } else if (newPlace > oldPlace) {
+          int = (+this.allCol[newPlace + 1].index + +this.allCol[newPlace].index) / 2
         }
+        this.changedCol.index = int;
+        await this.updateCol({
+          id: this.changedCol.id,
+          title: this.changedCol.title,
+          index: this.changedCol.index + ""
+        })
       }
-      this.cols.splice(data.newIndex, 0,
-          this.cols.splice(data.oldIndex, 1)[0]);
-      console.log(this.cols); // for testing
-    },
-    update(data) {
-      console.log(data)
     },
     dropped(data) {
-      //this.cols = this.allIndexes.slice()
-      //console.log(this.cols)
-      //
-      this.cols = this.allCol
       this.changedCol = data
-      //console.log(this.changedCol, this.cols)
+      //console.log(this.changedCol)
     },
   }
 }

@@ -2,7 +2,7 @@
   <b-card
       class="column"
       bg-variant="light"
-      @dragstart="ad"
+      @dragstart="sendInfo"
   >
     <div class="cardHeader">
       <b-form-input
@@ -20,15 +20,17 @@
       </b-button>
     </div>
     <draggable
+        @end="moveCard"
         class="drag"
         v-bind="dragOptions"
     >
       <Card
+          @cardDrop="dropped"
           v-for="card in this.getCardsById(this.id)
           .sort((a, b) => {
-              if (a.index > b.index)
+              if (+a.index > +b.index)
                   return 1;
-              if (a.index < b.index)
+              if (+a.index < +b.index)
                   return -1;
               // a должно быть равным b
               return 0;
@@ -76,7 +78,7 @@ export default {
   components: {Card, draggable},
   props: {
     id: Number,
-    index: Number,
+    index: String,
     title: String,
   },
   computed: {
@@ -96,6 +98,7 @@ export default {
   },
   data() {
     return {
+      changedCard: {},
       cards: [],
       cardName: '',
       colName: this.title,
@@ -110,7 +113,7 @@ export default {
       await this.updateCol({
         id: this.id,
         title: this.colName,
-        index: this.index
+        index: this.index + ""
       })
     },
     async del() {
@@ -124,22 +127,29 @@ export default {
         const newCard = {
           id: Date.now(),
           title: card,
-          index: this.newCardIndex,
+          index: this.newCardIndex + "",
           description: '',
           idCol: this.id,
         };
         return this.createCard(newCard)
       }
     },
-    ad() {
+    sendInfo() {
       const info = {
         id: this.id,
         title: this.colName,
         index: this.index
       }
-      //console.log(info)
       this.$emit('getDropped', info)
     },
+    dropped(data) {
+      this.changedCard = data
+      //console.log(data)
+    },
+    moveCard(data){
+      console.log(data.from)
+      console.log(data.to)
+    }
   }
 }
 </script>
