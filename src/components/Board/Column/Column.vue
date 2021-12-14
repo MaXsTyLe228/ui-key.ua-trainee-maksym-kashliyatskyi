@@ -6,23 +6,34 @@
     <div class="cardHeader">
       <b-form-input
           v-model="colName"
+          @blur="update"
           placeholder="Column"
           class="colName"
       />
       <b-button
           variant="outline-secondary"
           class="iconButton"
-          @click="$emit('remove',id)"
+          @click="del"
       >
         <b-icon-trash/>
       </b-button>
     </div>
     <Card
-        v-for="card in cards"
+        v-for="card in this.getCardsById(this.id)
+        .sort((a, b) => {
+                if (a.index > b.index)
+                    return 1;
+                if (a.index < b.index)
+                    return -1;
+                // a должно быть равным b
+                return 0;
+            })"
         :title="card.title"
         :id="card.id"
         :key="card.id"
-        @remove="removeCard"
+        :cardDescription="card.description"
+        :index="card.index"
+        :idCol="card.idCol"
     />
     <b-button
         v-if="!showInput"
@@ -51,6 +62,7 @@
 
 <script>
 import Card from "./Card";
+import {mapActions, mapGetters} from 'vuex';
 
 export default {
   name: 'Column',
@@ -59,7 +71,14 @@ export default {
   },
   props: {
     id: Number,
+    index: Number,
     title: String,
+  },
+  computed: {
+    ...mapGetters(['allCards', 'newCardIndex', 'getCardsById'])
+  },
+  async beforeMount() {
+    await this.fetchCards()
   },
   data() {
     return {
@@ -70,6 +89,18 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['deleteCol', 'updateCol',
+      'fetchCards', 'createCard']),
+    async update() {
+      await this.updateCol({
+        id: this.id,
+        title: this.colName,
+        index: this.index
+      })
+    },
+    async del() {
+      await this.deleteCol(this.id)
+    },
     addCard() {
       this.showInput = !this.showInput
       if (this.cardName) {
@@ -78,13 +109,13 @@ export default {
         const newCard = {
           id: Date.now(),
           title: card,
+          index: this.newCardIndex,
+          description: '',
+          idCol: this.id,
         };
-        return this.cards.push(newCard)
+        return this.createCard(newCard)
       }
     },
-    removeCard(id) {
-      this.cards = this.cards.filter(card => card.id !== id)
-    }
   }
 }
 </script>

@@ -2,11 +2,11 @@
   <div class="content">
     <div class="board">
       <Column
-          v-for="column in columns"
+          v-for="column in this.allCol"
           :title="column.title"
+          :index="column.index"
           :id="column.id"
-          :key="column.id"
-          @remove="removeCol"
+          :key="column.index"
       />
       <div class="addColContainer">
         <b-button
@@ -38,35 +38,39 @@
 
 <script>
 import Column from "./Column/Column";
+import {mapGetters, mapActions} from 'vuex';
 
 export default {
   name: 'Board',
-  components: {
-    Column
+  components: {Column},
+  computed: {
+    ...mapGetters(["allCol",
+      'colsLength', 'newColIndex'])
+  },
+  async beforeMount() {
+    await this.fetchCols()
   },
   data() {
     return {
       showInput: false,
-      columns: [],
       columnName: '',
     }
   },
   methods: {
-    addColumn() {
+    ...mapActions(['fetchCols', 'createCol']),
+    async addColumn() {
       this.showInput = !this.showInput
       if (this.columnName) {
-        const col = this.columnName
+        const col = this.columnName;
         this.columnName = '';
-        const newColumn = {
-          id: Date.now(),
-          title: col,
-        };
-        return this.columns.push(newColumn)
+        await this.createCol(
+            {
+              id: Date.now(),
+              title: col,
+              index: this.newColIndex,
+            });
       }
     },
-    removeCol(id) {
-      this.columns = this.columns.filter(col => col.id !== id)
-    }
   }
 }
 </script>
