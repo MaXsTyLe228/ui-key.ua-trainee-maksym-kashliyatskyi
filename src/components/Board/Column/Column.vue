@@ -19,11 +19,21 @@
       </b-button>
     </div>
     <Card
-        v-for="card in cards"
+        v-for="card in this.getCardsById(this.id)
+        .sort((a, b) => {
+                if (a.index > b.index)
+                    return 1;
+                if (a.index < b.index)
+                    return -1;
+                // a должно быть равным b
+                return 0;
+            })"
         :title="card.title"
         :id="card.id"
         :key="card.id"
-        @remove="removeCard"
+        :cardDescription="card.description"
+        :index="card.index"
+        :idCol="card.idCol"
     />
     <b-button
         v-if="!showInput"
@@ -52,7 +62,7 @@
 
 <script>
 import Card from "./Card";
-import {mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 
 export default {
   name: 'Column',
@@ -64,6 +74,12 @@ export default {
     index: Number,
     title: String,
   },
+  computed: {
+    ...mapGetters(['allCards', 'newCardIndex', 'getCardsById'])
+  },
+  async beforeMount() {
+    await this.fetchCards()
+  },
   data() {
     return {
       cards: [],
@@ -73,7 +89,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['deleteCol', 'updateCol', 'fetchCols']),
+    ...mapActions(['deleteCol', 'updateCol',
+      'fetchCards', 'createCard']),
     async update() {
       await this.updateCol({
         id: this.id,
@@ -81,7 +98,7 @@ export default {
         index: this.index
       })
     },
-    async del(){
+    async del() {
       await this.deleteCol(this.id)
     },
     addCard() {
@@ -92,14 +109,13 @@ export default {
         const newCard = {
           id: Date.now(),
           title: card,
+          index: this.newCardIndex,
+          description: '',
+          idCol: this.id,
         };
-        return this.cards.push(newCard)
+        return this.createCard(newCard)
       }
-    }
-    ,
-    removeCard(id) {
-      this.cards = this.cards.filter(card => card.id !== id)
-    }
+    },
   }
 }
 </script>

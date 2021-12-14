@@ -2,7 +2,7 @@
   <div class="content">
     <div class="board">
       <Column
-          v-for="column in allCol"
+          v-for="column in this.allCol"
           :title="column.title"
           :index="column.index"
           :id="column.id"
@@ -42,10 +42,11 @@ import {mapGetters, mapActions} from 'vuex';
 
 export default {
   name: 'Board',
-  components: {
-    Column
+  components: {Column},
+  computed: {
+    ...mapGetters(["allCol",
+      'colsLength', 'newColIndex'])
   },
-  computed: {...mapGetters(["allCol", 'colsLength', 'getMaxOfArray'])},
   async beforeMount() {
     await this.fetchCols()
   },
@@ -66,7 +67,7 @@ export default {
             {
               id: Date.now(),
               title: col,
-              index: this.getMaxOfArray,
+              index: this.newColIndex,
             });
       }
     },

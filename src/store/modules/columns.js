@@ -1,13 +1,14 @@
 import axios from "axios";
+import {PATH} from "../consts";
 
 export default {
     actions: {
         fetchCols(context) {
-            axios.get('http://localhost:3000/dev' + '/columns')
+            axios.get(PATH + '/columns')
                 .then(res => context.commit('getCols', res.data.Items));
         },
         createCol(context, params) {
-            axios.post('http://localhost:3000/dev' + '/createColumn',
+            axios.post(PATH + '/createColumn',
                 JSON.stringify(params))
                 .then(() => {
                     context.commit('addCol',
@@ -19,7 +20,7 @@ export default {
                 })
         },
         deleteCol(context, id) {
-            axios.delete('http://localhost:3000/dev' + '/deleteCol/' + id)
+            axios.delete(PATH + '/deleteCol/' + id)
                 .then(() => {
                     context.commit('deleteCol', id)
                 })
@@ -29,7 +30,7 @@ export default {
                 title: params.title,
                 index: params.index
             }
-            axios.put('http://localhost:3000/dev' + '/updateCol/' + params.id,
+            axios.put(PATH + '/updateCol/' + params.id,
                 JSON.stringify(body))
                 .then(res => {
                     context.commit('updateCol', res.data.Attributes)
@@ -40,21 +41,17 @@ export default {
     mutations: {
         getCols(state, cols) {
             state.columns = cols;
-            //console.log(state.columns)
         },
         addCol(state, col) {
             state.columns.push(col)
-            //console.log(state.columns)
         },
         deleteCol(state, id) {
             state.columns = state.columns.filter(col => col.id !== id)
-            //console.log(state.columns)
         },
         updateCol(state, params) {
             let updatedCol = state.columns.findIndex(item => item.id === params.id);
             state.columns[updatedCol].title = params.title;
             state.columns[updatedCol].index = params.index;
-            //console.log(state.columns)
         }
     },
 
@@ -65,11 +62,19 @@ export default {
     getters: {
         allCol(state) {
             return state.columns
+                .sort((a, b) => {
+                    if (a.index > b.index)
+                        return 1;
+                    if (a.index < b.index)
+                        return -1;
+                    // a должно быть равным b
+                    return 0;
+                });
         },
         colsLength(state) {
             return state.columns.length
         },
-        getMaxOfArray(state) {
+        newColIndex(state) {
             let max = 0;
             for (let i in state.columns) {
                 if (state.columns[i].index > max)
