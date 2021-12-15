@@ -168,7 +168,6 @@ export default {
       let replaceIndex;
       this.cards = this.getCardsById(this.id)
       this.$store.state.newCol = this.id
-      this.$store.state.changeCard.idCol = this.id
       const newPlace = this.$store.state.newIndex
       const oldPlace = this.$store.state.oldIndex
       const newColId = this.$store.state.newCol
@@ -182,7 +181,11 @@ export default {
           } else if (newPlace === this.getCardsById(this.id).length) {
             replaceIndex = this.maxCardIndex(this.getCardsById(this.id))
           } else {
-            replaceIndex = (+this.getCardsById(this.id)[newPlace - 1].index + +this.getCardsById(this.id)[newPlace].index) / 2
+            try {
+              replaceIndex = (+this.getCardsById(this.id)[newPlace - 1].index + +this.getCardsById(this.id)[newPlace].index) / 2
+            } catch (e) {
+              return 0
+            }
           }
         } else if (newPlace !== oldPlace && newColId === oldColId) {
           if (newPlace === 0) {
