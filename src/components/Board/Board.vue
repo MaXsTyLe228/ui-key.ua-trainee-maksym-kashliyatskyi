@@ -9,7 +9,7 @@
       >
         <Column
             @getDropped="dropped"
-            v-for="column in allCol"
+            v-for="column in this.allCol"
             :title="column.title"
             :index="column.index"
             :id="column.id"

@@ -28,7 +28,7 @@
     >
       <Card
           @cardDrop="dropped"
-          v-for="card in this.getCardsById(this.id)"
+          v-for="card in getCardsById(this.id)"
           :title="card.title"
           :id="card.id"
           :key="card.id"
