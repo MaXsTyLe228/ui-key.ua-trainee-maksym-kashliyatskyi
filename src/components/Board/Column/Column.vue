@@ -138,20 +138,11 @@ export default {
     },
     dropped(data) {
       this.$store.state.changeCard = data
-      /*{
-        id: data.id,
-        title: data.title,
-        index: data.index,
-        description: data.description,
-        idCol: data.idCol,
-      }*/
       this.$store.state.oldCol = data.idCol
-      //console.log(this.$store.state.changeCard)
     },
     moveCard(data) {
       this.$store.state.newIndex = data.newIndex
       this.$store.state.oldIndex = data.oldIndex
-      //console.log(this.$store.state.newIndex, this.$store.state.oldIndex)
     },
     minCardIndex(arr) {
       if (arr.length === 0)
@@ -161,7 +152,6 @@ export default {
         if (+arr[i].index < min)
           min = +arr[i].index
       }
-      console.log(min)
       return min;
     },
     maxCardIndex(arr) {
@@ -172,18 +162,13 @@ export default {
         if (+arr[i].index > max)
           max = +arr[i].index
       }
-      console.log(max)
       return max + 0.00001;
     },
     async newIdCol() {
       let replaceIndex;
       this.cards = this.getCardsById(this.id)
-      //console.log('cards', this.cards)
-      //console.log(this.getCardsById(this.id))
       this.$store.state.newCol = this.id
-      //console.log(this.$store.state.newCol, this.$store.state.oldCol)
       this.$store.state.changeCard.idCol = this.id
-      //console.log('change', this.$store.state.changeCard)
       const newPlace = this.$store.state.newIndex
       const oldPlace = this.$store.state.oldIndex
       const newColId = this.$store.state.newCol
@@ -226,26 +211,7 @@ export default {
           description: this.$store.state.changeCard.description,
           idCol: this.id
         })
-      }``
-      /*if (this.$store.state.newCol !== this.$store.state.oldCol) {
-          if (newPlace === 0) {
-            replaceIndex = this.minCardIndex(this.cards) / 2
-          } else if (newPlace === this.allCol.length - 1) {
-            replaceIndex = this.maxCardIndex(this.cards)
-          } else if (newPlace < oldPlace) {
-            replaceIndex = (+this.cards[newPlace - 1].index + +this.cards[newPlace].index) / 2
-          } else if (newPlace > oldPlace) {
-            replaceIndex = (+this.cards[newPlace + 1].index + +this.cards[newPlace].index) / 2
-          }
-        console.log(replaceIndex)
-      }*/
-      /*await this.updateCard({
-              id: this.id,
-              title: this.cardName,
-              index: this.index,
-              description: this.description,
-              idCol: this.idCol,
-            })*/
+      }
     }
   }
 }
