@@ -73,6 +73,7 @@ export default {
         title: this.title,
         idCol: this.idCol,
       }
+      //console.log(info)
       this.$emit('cardDrop', info)
     },
   }

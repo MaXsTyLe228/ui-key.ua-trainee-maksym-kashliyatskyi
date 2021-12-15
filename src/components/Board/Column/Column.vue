@@ -28,15 +28,7 @@
     >
       <Card
           @cardDrop="dropped"
-          v-for="card in this.getCardsById(this.id)
-          .sort((a, b) => {
-              if (+a.index > +b.index)
-                  return 1;
-              if (+a.index < +b.index)
-                  return -1;
-              // a должно быть равным b
-              return 0;
-          })"
+          v-for="card in this.getCardsById(this.id)"
           :title="card.title"
           :id="card.id"
           :key="card.id"
@@ -110,7 +102,7 @@ export default {
   },
   methods: {
     ...mapActions(['deleteCol', 'updateCol',
-      'fetchCards', 'createCard']),
+      'fetchCards', 'createCard', 'updateCard']),
     async update() {
       await this.updateCol({
         id: this.id,
@@ -145,14 +137,115 @@ export default {
       this.$emit('getDropped', info)
     },
     dropped(data) {
-      this.changedCard = {...data}
-      console.log(this.changedCard.idCol)
+      this.$store.state.changeCard = data
+      /*{
+        id: data.id,
+        title: data.title,
+        index: data.index,
+        description: data.description,
+        idCol: data.idCol,
+      }*/
+      this.$store.state.oldCol = data.idCol
+      //console.log(this.$store.state.changeCard)
     },
-    moveCard(){
-      //console.log(this.id)
+    moveCard(data) {
+      this.$store.state.newIndex = data.newIndex
+      this.$store.state.oldIndex = data.oldIndex
+      //console.log(this.$store.state.newIndex, this.$store.state.oldIndex)
     },
-    newIdCol(){
-      this.changedCard.idCol = this.id
+    minCardIndex(arr) {
+      if (arr.length === 0)
+        return 0.001
+      let min = +arr[0].index;
+      for (let i in arr) {
+        if (+arr[i].index < min)
+          min = +arr[i].index
+      }
+      console.log(min)
+      return min;
+    },
+    maxCardIndex(arr) {
+      if (arr.length === 0)
+        return 0.001
+      let max = +arr[0].index;
+      for (let i in arr) {
+        if (+arr[i].index > max)
+          max = +arr[i].index
+      }
+      console.log(max)
+      return max + 0.00001;
+    },
+    async newIdCol() {
+      let replaceIndex;
+      this.cards = this.getCardsById(this.id)
+      //console.log('cards', this.cards)
+      //console.log(this.getCardsById(this.id))
+      this.$store.state.newCol = this.id
+      //console.log(this.$store.state.newCol, this.$store.state.oldCol)
+      this.$store.state.changeCard.idCol = this.id
+      //console.log('change', this.$store.state.changeCard)
+      const newPlace = this.$store.state.newIndex
+      const oldPlace = this.$store.state.oldIndex
+      const newColId = this.$store.state.newCol
+      const oldColId = this.$store.state.oldCol
+      if (newPlace === oldPlace && newColId === oldColId) {
+        return 0;
+      } else {
+        if (newPlace === oldPlace && newColId !== oldColId) {
+          if (newPlace === 0) {
+            replaceIndex = this.minCardIndex(this.getCardsById(this.id)) / 2
+          } else if (newPlace === this.getCardsById(this.id).length) {
+            replaceIndex = this.maxCardIndex(this.getCardsById(this.id))
+          } else {
+            replaceIndex = (+this.getCardsById(this.id)[newPlace - 1].index + +this.getCardsById(this.id)[newPlace].index) / 2
+          }
+        } else if (newPlace !== oldPlace && newColId === oldColId) {
+          if (newPlace === 0) {
+            replaceIndex = this.minCardIndex(this.getCardsById(this.id)) / 2
+          } else if (newPlace === this.getCardsById(this.id).length - 1) {
+            replaceIndex = this.maxCardIndex(this.getCardsById(this.id))
+          } else if (newPlace < oldPlace) {
+            replaceIndex = (+this.getCardsById(this.id)[newPlace - 1].index + +this.getCardsById(this.id)[newPlace].index) / 2
+          } else if (newPlace > oldPlace) {
+            replaceIndex = (+this.getCardsById(this.id)[newPlace + 1].index + +this.getCardsById(this.id)[newPlace].index) / 2
+          }
+        } else if (newPlace !== oldPlace && newColId !== oldColId) {
+          if (newPlace === 0) {
+            replaceIndex = this.minCardIndex(this.getCardsById(this.id)) / 2
+          } else if (newPlace === this.getCardsById(this.id).length) {
+            replaceIndex = this.maxCardIndex(this.getCardsById(this.id))
+          } else {
+            replaceIndex = (+this.getCardsById(this.id)[newPlace - 1].index + +this.getCardsById(this.id)[newPlace].index) / 2
+          }
+        }
+        this.$store.state.changeCard.index = replaceIndex
+        await this.updateCard({
+          id: this.$store.state.changeCard.id,
+          title: this.$store.state.changeCard.title,
+          index: replaceIndex + "",
+          description: this.$store.state.changeCard.description,
+          idCol: this.id
+        })
+      }``
+      /*if (this.$store.state.newCol !== this.$store.state.oldCol) {
+          if (newPlace === 0) {
+            replaceIndex = this.minCardIndex(this.cards) / 2
+          } else if (newPlace === this.allCol.length - 1) {
+            replaceIndex = this.maxCardIndex(this.cards)
+          } else if (newPlace < oldPlace) {
+            replaceIndex = (+this.cards[newPlace - 1].index + +this.cards[newPlace].index) / 2
+          } else if (newPlace > oldPlace) {
+            replaceIndex = (+this.cards[newPlace + 1].index + +this.cards[newPlace].index) / 2
+          }
+        console.log(replaceIndex)
+      }*/
+      /*await this.updateCard({
+              id: this.id,
+              title: this.cardName,
+              index: this.index,
+              description: this.description,
+              idCol: this.idCol,
+            })*/
     }
   }
 }

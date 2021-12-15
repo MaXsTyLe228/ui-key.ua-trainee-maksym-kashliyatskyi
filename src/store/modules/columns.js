@@ -89,7 +89,7 @@ export default {
         },
         newColIndex(state) {
             if (state.columns.length === 0)
-                return 0.00001
+                return 0.001
             let max = +state.columns[0].index;
             for (let i in state.columns) {
                 if (+state.columns[i].index > max)

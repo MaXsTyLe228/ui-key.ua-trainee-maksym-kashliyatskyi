@@ -61,17 +61,37 @@ export default {
     },
     state: {
         cards: [],
+        changeCard: {},
+        newCol: Number,
+        oldCol: Number,
+        newIndex: Number,
+        oldIndex: Number,
     },
     getters: {
         allCards(state) {
             return state.cards
         },
         getCardsById: state => idCol => {
-            return state.cards.filter(card => card.idCol === idCol);
+            return state.cards.filter(card => card.idCol === idCol).sort((a, b) => {
+                if (+a.index > +b.index)
+                    return 1;
+                if (+a.index < +b.index)
+                    return -1;
+                // a должно быть равным b
+                return 0;
+            });
+        },
+        minCardIndex(state) {
+            let min = +state.cards[0].index;
+            for (let i in state.cards) {
+                if (+state.cards[i].index < min)
+                    min = +state.cards[i].index
+            }
+            return min;
         },
         newCardIndex(state) {
             if (state.cards.length === 0)
-                return 0.00001
+                return 0.001
             let max = +state.cards[0].index;
             for (let i in state.cards) {
                 if (+state.cards[i].index > max)
