@@ -25,7 +25,7 @@ export default {
   methods: {
     authorization() {
       return this.status === 'Sign in' ?
-          (this.status = 'Log out',
+          (this.status = 'Logout',
               this.avatar = 'https://placekitten.com/300/300',
               this.username = 'Maks')
           : (this.status = 'Sign in',

@@ -4,9 +4,9 @@
       <div class="form">
         <div class="text">Sign In</div>
         <div class="login-form">
-          <input type="email" placeholder="email"/>
-          <input type="password" placeholder="password"/>
-          <button>Submit</button>
+          <input type="email" placeholder="email" v-model="email"/>
+          <input type="password" placeholder="password" v-model="password"/>
+          <button @click="isAuth">Submit</button>
         </div>
       </div>
     </div>
@@ -14,8 +14,30 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from 'vuex';
+
 export default {
   name: 'Auth',
+  data() {
+    return {
+      email: "kashlyatsky@gmail.com",
+      password: "05092001",
+      info: this.getUserInfo
+    }
+  },
+  computed:{
+    ...mapGetters(['getUserInfo'])
+  },
+  methods: {
+    ...mapActions(['signIn']),
+    async isAuth() {
+      console.log({email: this.email, password: this.password})
+      await this.signIn({email: this.email, password: this.password})
+      //console.log(res)
+      //await this.$router.push('/trello-page')
+
+    }
+  }
 }
 </script>
 
