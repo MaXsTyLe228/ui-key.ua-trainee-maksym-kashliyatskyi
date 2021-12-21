@@ -17,7 +17,7 @@ export default new VueRouter({
         },
         {
             path: '*',
-            redirect: {name: 'trello'}
+            redirect: {name: 'auth'}
         },
     ]
 })

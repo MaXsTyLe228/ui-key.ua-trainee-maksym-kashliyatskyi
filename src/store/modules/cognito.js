@@ -7,6 +7,9 @@ export default {
         signIn(context, params) {
             axios.post(PATH + '/signIn', JSON.stringify(params))
                 .then(async res => {
+                    localStorage.accessToken = res.data.token.accessToken
+                    localStorage.idToken = res.data.token.idToken
+                    localStorage.refreshToken = res.data.token.refreshToken
                     await router.push('/trello-page')
                     context.commit('signIn', res.data)
                 })

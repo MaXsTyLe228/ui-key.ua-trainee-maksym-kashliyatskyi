@@ -31,11 +31,10 @@ export default {
   methods: {
     ...mapActions(['signIn']),
     async isAuth() {
-      console.log({email: this.email, password: this.password})
+      //console.log({email: this.email, password: this.password})
       await this.signIn({email: this.email, password: this.password})
       //console.log(res)
       //await this.$router.push('/trello-page')
-
     }
   }
 }
