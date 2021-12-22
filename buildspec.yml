@@ -14,3 +14,5 @@ artifacts:
   secondary-artifacts:
     artifact1:
       base-directory: dist
+      files:
+        - '**/*'
