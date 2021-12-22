@@ -4,8 +4,12 @@ phases:
   install:
     commands:
       - npm install
+  build:
+    commands:
       - npm run build
-      - aws s3 cp s3://arn:aws:s3:::maks-ui-dev
+
 artifacts:
   files:
     - '**/*'
+  discard-paths: no
+  base-directory: build
