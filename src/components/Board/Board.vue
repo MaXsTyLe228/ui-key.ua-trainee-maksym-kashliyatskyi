@@ -78,7 +78,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchCols', 'createCol', 'updateCol']),
+    ...mapActions(['fetchCols', 'createCol', 'fetchCards', 'updateCol']),
     async addColumn() {
       this.showInput = !this.showInput
       if (this.columnName) {
