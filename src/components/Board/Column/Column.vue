@@ -87,9 +87,9 @@ export default {
       };
     },
   },
-  async beforeMount() {
-    await this.fetchCards()
-  },
+  // async beforeMount() {
+  //   await this.fetchCards()
+  // },
   data() {
     return {
       changedCard: {},

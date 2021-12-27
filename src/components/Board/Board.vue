@@ -66,6 +66,7 @@ export default {
   },
   async beforeMount() {
     await this.fetchCols()
+    await this.fetchCards()
   },
   data() {
     return {
