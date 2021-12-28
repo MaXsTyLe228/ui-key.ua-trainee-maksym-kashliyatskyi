@@ -4,14 +4,14 @@ import router from '../../router/routes'
 
 export default {
     actions: {
-        signIn(context, params) {
+        async signIn(context, params) {
             axios.post(PATH + '/signIn', JSON.stringify(params))
                 .then(async res => {
-                    localStorage.accessToken = res.data.token.accessToken
-                    localStorage.idToken = res.data.token.idToken
-                    localStorage.refreshToken = res.data.token.refreshToken
+                    //localStorage.accessToken = res.data.token.accessToken
+                    //localStorage.refreshToken = res.data.token.refreshToken
+                    localStorage.setItem('idToken', res.data.token.idToken)
+                    await context.commit('signIn', res.data)
                     await router.push('/trello-page')
-                    context.commit('signIn', res.data)
                 })
                 .catch(() => {
                     console.log('You cannot enter')
@@ -21,10 +21,13 @@ export default {
     mutations: {
         signIn(state, data) {
             state.userInfo.push(data)
+            state.login = true
         },
     },
     state: {
         userInfo: [],
+        idToken: String,
+        login: Boolean,
     },
     getters: {
         getUserInfo(state) {

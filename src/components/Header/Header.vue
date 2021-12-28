@@ -9,6 +9,7 @@
 
 <script>
 import User from "./User";
+import router from "../../../src/router/routes"
 
 export default {
   name: 'Header',
@@ -17,20 +18,30 @@ export default {
   },
   data() {
     return {
-      status: 'Sign in',
-      username: '',
-      avatar: '',
+      status: 'Logout',
+      username: 'Maks',
+      avatar: 'https://placekitten.com/300/300',
     }
   },
   methods: {
     authorization() {
-      return this.status === 'Sign in' ?
-          (this.status = 'Logout',
-              this.avatar = 'https://placekitten.com/300/300',
-              this.username = 'Maks')
-          : (this.status = 'Sign in',
-              this.avatar = '',
-              this.username = '')
+      return localStorage.idToken ?
+          (
+              this.status = 'Logout',
+                  this.avatar = 'https://placekitten.com/300/300',
+                  this.username = 'Maks',
+                  this.$store.state.login = !this.$store.state.login,
+                  localStorage.removeItem('idToken'),
+                  this.$store.state.columns = [],
+                  this.$store.state.cards = [],
+                  router.push('/sign-in')
+          )
+          :
+          (
+              this.status = 'Sign in',
+                  this.avatar = '',
+                  this.username = ''
+          )
     }
   }
 }
@@ -38,7 +49,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.header{
+.header {
   margin: 0;
 }
 </style>

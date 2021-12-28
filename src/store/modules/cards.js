@@ -1,15 +1,17 @@
 import axios from "axios";
-import {PATH} from "../consts";
+import {PATH, headers} from "../consts";
 
 export default {
     actions: {
         fetchCards(context) {
-            axios.get(PATH + '/cards')
+            axios.get(PATH + '/cards', {
+                "Authorization": "Bearer " + localStorage.getItem('idToken')
+            })
                 .then(res => context.commit('getCards', res.data.Items));
         },
         createCard(context, params) {
             axios.post(PATH + '/createCard',
-                JSON.stringify(params))
+                JSON.stringify(params), {headers})
                 .then(() => {
                     context.commit('addCard',
                         {
@@ -22,7 +24,7 @@ export default {
                 })
         },
         deleteCard(context, id) {
-            axios.delete(PATH + '/deleteCard/' + id)
+            axios.delete(PATH + '/deleteCard/' + id, {headers})
                 .then(() => {
                     context.commit('deleteCard', id)
                 })
@@ -35,7 +37,7 @@ export default {
                 idCol: params.idCol,
             }
             axios.put(PATH + '/updateCard/' + params.id,
-                JSON.stringify(body))
+                JSON.stringify(body), {headers})
                 .then(res => {
                     context.commit('updateCard', res.data.Attributes)
                 })

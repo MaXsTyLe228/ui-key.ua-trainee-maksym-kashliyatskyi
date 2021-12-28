@@ -1,15 +1,17 @@
 import axios from "axios";
-import {PATH} from "../consts";
+import {PATH, headers} from "../consts";
 
 export default {
     actions: {
         fetchCols(context) {
-            axios.get(PATH + '/columns')
+            axios.get(PATH + '/columns', {
+                "Authorization": "Bearer " + localStorage.getItem('idToken')
+            })
                 .then(res => context.commit('getCols', res.data.Items));
         },
         createCol(context, params) {
             axios.post(PATH + '/createColumn',
-                JSON.stringify(params))
+                JSON.stringify(params), {headers})
                 .then(() => {
                     context.commit('addCol',
                         {
@@ -20,7 +22,7 @@ export default {
                 })
         },
         deleteCol(context, id) {
-            axios.delete(PATH + '/deleteCol/' + id)
+            axios.delete(PATH + '/deleteCol/' + id, {headers})
                 .then(() => {
                     context.commit('deleteCol', id)
                 })
@@ -31,7 +33,7 @@ export default {
                 index: params.index
             }
             axios.put(PATH + '/updateCol/' + params.id,
-                JSON.stringify(body))
+                JSON.stringify(body), {headers})
                 .then(res => {
                     //console.log('asd')
                     context.commit('updateCol', res.data.Attributes)
