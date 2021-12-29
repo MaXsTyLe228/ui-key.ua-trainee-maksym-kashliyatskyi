@@ -1,5 +1,8 @@
 <template>
-  <div class="board">
+  <div v-if="loadingStatus">
+    <Spinner/>
+  </div>
+  <div v-else class="board">
     <draggable
         style="display: flex;"
         v-bind="dragOptions"
@@ -45,13 +48,17 @@
 import Column from "./Column/Column";
 import {mapGetters, mapActions} from 'vuex';
 import draggable from "vuedraggable";
+import Spinner from "../Spinner";
 
 export default {
   name: 'Board',
-  components: {Column, draggable},
+  components: {Spinner, Column, draggable},
   computed: {
     ...mapGetters(['allCol', 'newColIndex', 'allIndexes',
       'minColIndex']),
+    loadingStatus() {
+      return this.$store.getters.loadingStatus
+    },
     dragOptions() {
       return {
         animation: 0,

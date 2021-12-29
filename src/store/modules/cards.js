@@ -4,13 +4,16 @@ import {PATH} from "../consts";
 export default {
     actions: {
         fetchCards(context) {
+            context.commit('loadingStatus', true)
             let token = localStorage.getItem('idToken')
             axios.get(PATH + '/cards', {headers: {"Authorization": `Bearer ${token}`}})
                 .then(res => {
+                    context.commit('loadingStatus', false)
                     context.commit('getCards', res.data.Items)
                 })
         },
         createCard(context, params) {
+            context.commit('loadingStatus', true)
             let token = localStorage.getItem('idToken')
             axios.post(PATH + '/createCard',
                 JSON.stringify(params), {headers: {"Authorization": `Bearer ${token}`}})
@@ -23,16 +26,20 @@ export default {
                             description: params.description,
                             idCol: params.idCol,
                         })
+                    context.commit('loadingStatus', false)
                 })
         },
         deleteCard(context, id) {
+            context.commit('loadingStatus', true)
             let token = localStorage.getItem('idToken')
             axios.delete(PATH + '/deleteCard/' + id, {headers: {"Authorization": `Bearer ${token}`}})
                 .then(() => {
                     context.commit('deleteCard', id)
+                    context.commit('loadingStatus', false)
                 })
         },
         updateCard(context, params) {
+            context.commit('loadingStatus', true)
             let token = localStorage.getItem('idToken')
             const body = {
                 title: params.title,
@@ -44,6 +51,7 @@ export default {
                 JSON.stringify(body), {headers: {"Authorization": `Bearer ${token}`}})
                 .then(res => {
                     context.commit('updateCard', res.data.Attributes)
+                    context.commit('loadingStatus', false)
                 })
         }
     },

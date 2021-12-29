@@ -5,6 +5,7 @@ import router from "../../router/routes";
 export default {
     actions: {
         async signIn(context, params) {
+            context.commit('loadingStatus', true)
             axios.post(PATH + '/signIn', JSON.stringify(params))
                 .then(async res => {
                     //localStorage.accessToken = res.data.token.accessToken
@@ -13,8 +14,10 @@ export default {
                     await context.commit('signIn', res.data)
                     console.log(localStorage.idToken)
                     await router.push('/trello-page')
+                    context.commit('loadingStatus', false)
                 })
                 .catch(() => {
+                    context.commit('loadingStatus', false)
                     console.log('You cannot enter')
                 })
         }

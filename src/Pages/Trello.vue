@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchCols', 'fetchCards'])
-  }
+  },
 }
 </script>
 

@@ -11,5 +11,18 @@ export default new Vuex.Store({
         columns,
         cards,
         cognito,
+    },
+    state: {
+        loadingStatus: false
+    },
+    mutations: {
+        loadingStatus(state, newLoadingStatus) {
+            state.loadingStatus = newLoadingStatus
+        }
+    },
+    getters: {
+        loadingStatus(state) {
+            return state.loadingStatus
+        }
     }
 })

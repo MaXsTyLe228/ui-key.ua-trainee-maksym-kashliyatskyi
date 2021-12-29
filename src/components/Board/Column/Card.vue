@@ -1,5 +1,8 @@
 <template>
-  <b-card class="card" @dragstart="sendInfo">
+  <b-card class="card"
+          @dragstart="sendInfo"
+          @dragend="this.isDrag=false"
+  >
     <div class="cardHeader">
       <b-form-input
           v-model="cardName"
@@ -47,6 +50,7 @@ export default {
   },
   data() {
     return {
+      isDrag: false,
       description: this.cardDescription,
       cardName: this.title,
     }
@@ -57,15 +61,17 @@ export default {
       await this.deleteCard(this.id)
     },
     async update() {
-      await this.updateCard({
-        id: this.id,
-        title: this.cardName,
-        index: this.index,
-        description: this.description,
-        idCol: this.idCol,
-      })
+      if (!this.isDrag)
+        await this.updateCard({
+          id: this.id,
+          title: this.cardName,
+          index: this.index,
+          description: this.description,
+          idCol: this.idCol,
+        })
     },
     sendInfo() {
+      this.isDrag = true
       const info = {
         id: this.id,
         description: this.description,
