@@ -61,7 +61,7 @@ export default {
       };
     },
   },
-  mounted() {
+  async mounted() {
     this.fetchCols()
     this.fetchCards()
   },

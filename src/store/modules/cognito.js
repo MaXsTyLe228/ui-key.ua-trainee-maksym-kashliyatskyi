@@ -1,6 +1,6 @@
 import axios from "axios";
 import {PATH} from "../consts";
-import router from '../../router/routes'
+import router from "../../router/routes";
 
 export default {
     actions: {
@@ -11,6 +11,7 @@ export default {
                     //localStorage.refreshToken = res.data.token.refreshToken
                     localStorage.setItem('idToken', res.data.token.idToken)
                     await context.commit('signIn', res.data)
+                    console.log(localStorage.idToken)
                     await router.push('/trello-page')
                 })
                 .catch(() => {

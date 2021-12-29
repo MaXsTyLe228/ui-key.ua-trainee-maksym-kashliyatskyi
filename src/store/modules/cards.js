@@ -1,17 +1,19 @@
 import axios from "axios";
-import {PATH, headers} from "../consts";
+import {PATH} from "../consts";
 
 export default {
     actions: {
         fetchCards(context) {
-            axios.get(PATH + '/cards', {
-                "Authorization": "Bearer " + localStorage.getItem('idToken')
-            })
-                .then(res => context.commit('getCards', res.data.Items));
+            let token = localStorage.getItem('idToken')
+            axios.get(PATH + '/cards', {headers: {"Authorization": `Bearer ${token}`}})
+                .then(res => {
+                    context.commit('getCards', res.data.Items)
+                })
         },
         createCard(context, params) {
+            let token = localStorage.getItem('idToken')
             axios.post(PATH + '/createCard',
-                JSON.stringify(params), {headers})
+                JSON.stringify(params), {headers: {"Authorization": `Bearer ${token}`}})
                 .then(() => {
                     context.commit('addCard',
                         {
@@ -24,12 +26,14 @@ export default {
                 })
         },
         deleteCard(context, id) {
-            axios.delete(PATH + '/deleteCard/' + id, {headers})
+            let token = localStorage.getItem('idToken')
+            axios.delete(PATH + '/deleteCard/' + id, {headers: {"Authorization": `Bearer ${token}`}})
                 .then(() => {
                     context.commit('deleteCard', id)
                 })
         },
         updateCard(context, params) {
+            let token = localStorage.getItem('idToken')
             const body = {
                 title: params.title,
                 index: params.index,
@@ -37,7 +41,7 @@ export default {
                 idCol: params.idCol,
             }
             axios.put(PATH + '/updateCard/' + params.id,
-                JSON.stringify(body), {headers})
+                JSON.stringify(body), {headers: {"Authorization": `Bearer ${token}`}})
                 .then(res => {
                     context.commit('updateCard', res.data.Attributes)
                 })

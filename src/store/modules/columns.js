@@ -1,17 +1,21 @@
 import axios from "axios";
-import {PATH, headers} from "../consts";
+import {PATH} from "../consts";
+import router from "../../router/routes";
 
 export default {
     actions: {
         fetchCols(context) {
-            axios.get(PATH + '/columns', {
-                "Authorization": "Bearer " + localStorage.getItem('idToken')
-            })
-                .then(res => context.commit('getCols', res.data.Items));
+            const token = localStorage.getItem('idToken')
+            axios.get(PATH + '/columns', {headers: {"Authorization": `Bearer ${token}`}})
+                .then(res => context.commit('getCols', res.data.Items))
+                .catch(() => {
+                    router.push('/sign-in')
+                });
         },
         createCol(context, params) {
+            const token = localStorage.getItem('idToken')
             axios.post(PATH + '/createColumn',
-                JSON.stringify(params), {headers})
+                JSON.stringify(params), {headers: {"Authorization": `Bearer ${token}`}})
                 .then(() => {
                     context.commit('addCol',
                         {
@@ -22,18 +26,20 @@ export default {
                 })
         },
         deleteCol(context, id) {
-            axios.delete(PATH + '/deleteCol/' + id, {headers})
+            const token = localStorage.getItem('idToken')
+            axios.delete(PATH + '/deleteCol/' + id, {headers: {"Authorization": `Bearer ${token}`}})
                 .then(() => {
                     context.commit('deleteCol', id)
                 })
         },
         updateCol(context, params) {
+            const token = localStorage.getItem('idToken')
             const body = {
                 title: params.title,
                 index: params.index
             }
             axios.put(PATH + '/updateCol/' + params.id,
-                JSON.stringify(body), {headers})
+                JSON.stringify(body), {headers: {"Authorization": `Bearer ${token}`}})
                 .then(res => {
                     //console.log('asd')
                     context.commit('updateCol', res.data.Attributes)
