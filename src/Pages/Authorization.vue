@@ -20,8 +20,8 @@ export default {
   name: 'Auth',
   data() {
     return {
-      email: "kashlyatsky@gmail.com",
-      password: "05092001",
+      email: "",
+      password: "",
       info: this.getUserInfo
     }
   },
