@@ -1,6 +1,9 @@
 <template>
   <div class="authorization">
-    <div class="login-page">
+    <div v-if="loadingStatus">
+      <Spinner/>
+    </div>
+    <div v-else class="login-page">
       <div class="form">
         <div class="text">Sign In</div>
         <div class="login-form">
@@ -15,9 +18,11 @@
 
 <script>
 import {mapActions, mapGetters} from 'vuex';
+import Spinner from "../components/Spinner";
 
 export default {
   name: 'Auth',
+  components: {Spinner},
   data() {
     return {
       email: "",
@@ -26,7 +31,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getUserInfo'])
+    ...mapGetters(['getUserInfo']),
+    loadingStatus() {
+      return this.$store.getters.loadingStatus
+    }
   },
   methods: {
     ...mapActions(['signIn']),

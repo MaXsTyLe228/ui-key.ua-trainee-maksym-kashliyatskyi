@@ -8,6 +8,7 @@
     <div class="cardHeader">
       <b-form-input
           v-model="colName"
+          @keyup.enter="update"
           @blur="update"
           placeholder="Column"
           class="colName"
@@ -92,6 +93,7 @@ export default {
   // },
   data() {
     return {
+      isDrag: false,
       changedCard: {},
       cards: [],
       cardName: '',
@@ -104,6 +106,7 @@ export default {
     ...mapActions(['deleteCol', 'updateCol',
       'fetchCards', 'createCard', 'updateCard']),
     async update() {
+      if (!this.isDrag)
       await this.updateCol({
         id: this.id,
         title: this.colName,
@@ -129,6 +132,7 @@ export default {
       }
     },
     sendInfo() {
+      this.isDrag = true
       const info = {
         id: this.id,
         title: this.colName,
@@ -165,6 +169,8 @@ export default {
       return max + 0.00001;
     },
     async newIdCol() {
+      this.isDrag = false;
+      console.log('card')
       let replaceIndex;
       this.cards = this.getCardsById(this.id)
       this.$store.state.newCol = this.id

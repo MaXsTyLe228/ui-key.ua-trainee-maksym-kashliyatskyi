@@ -5,14 +5,20 @@ import router from "../../router/routes";
 export default {
     actions: {
         fetchCols(context) {
+            context.commit('loadingStatus', true)
             const token = localStorage.getItem('idToken')
             axios.get(PATH + '/columns', {headers: {"Authorization": `Bearer ${token}`}})
-                .then(res => context.commit('getCols', res.data.Items))
+                .then(res => {
+                    context.commit('loadingStatus', false)
+                    context.commit('getCols', res.data.Items)
+                })
                 .catch(() => {
+                    context.commit('loadingStatus', false)
                     router.push('/sign-in')
                 });
         },
         createCol(context, params) {
+            context.commit('loadingStatus', true)
             const token = localStorage.getItem('idToken')
             axios.post(PATH + '/createColumn',
                 JSON.stringify(params), {headers: {"Authorization": `Bearer ${token}`}})
@@ -23,16 +29,20 @@ export default {
                             title: params.title,
                             index: params.index,
                         })
+                    context.commit('loadingStatus', false)
                 })
         },
         deleteCol(context, id) {
+            context.commit('loadingStatus', true)
             const token = localStorage.getItem('idToken')
             axios.delete(PATH + '/deleteCol/' + id, {headers: {"Authorization": `Bearer ${token}`}})
                 .then(() => {
+                    context.commit('loadingStatus', false)
                     context.commit('deleteCol', id)
                 })
         },
         updateCol(context, params) {
+            context.commit('loadingStatus', true)
             const token = localStorage.getItem('idToken')
             const body = {
                 title: params.title,
@@ -43,6 +53,7 @@ export default {
                 .then(res => {
                     //console.log('asd')
                     context.commit('updateCol', res.data.Attributes)
+                    context.commit('loadingStatus', false)
                 })
         },
     },
