@@ -51,7 +51,6 @@ export default {
             axios.put(PATH + '/updateCol/' + params.id,
                 JSON.stringify(body), {headers: {"Authorization": `Bearer ${token}`}})
                 .then(res => {
-                    //console.log('asd')
                     context.commit('updateCol', res.data.Attributes)
                     context.commit('loadingStatus', false)
                 })

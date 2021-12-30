@@ -16,7 +16,6 @@ export default {
 </script>
 
 <style scoped>
-
 .user {
   margin-right: 10px;
   display: inline;

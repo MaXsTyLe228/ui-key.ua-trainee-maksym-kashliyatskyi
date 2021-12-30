@@ -1,7 +1,7 @@
 <template>
   <b-card class="card"
           @dragstart="sendInfo"
-          @dragend="this.isDrag=false"
+          @dragend="dragFalse"
   >
     <div class="cardHeader">
       <b-form-input
@@ -69,6 +69,9 @@ export default {
           description: this.description,
           idCol: this.idCol,
         })
+    },
+    dragFalse(){
+      this.isDrag=false
     },
     sendInfo() {
       this.isDrag = true

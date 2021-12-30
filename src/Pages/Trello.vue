@@ -8,7 +8,6 @@
 <script>
 import Header from "../components/Header/Header";
 import Board from "../components/Board/Board";
-import {mapActions} from "vuex";
 
 export default {
   name: 'Trello',
@@ -16,11 +15,9 @@ export default {
     Header,
     Board,
   },
-  methods: {
-    ...mapActions(['fetchCols', 'fetchCards'])
-  },
+  // mounted() {
+  //   this.fetchCols()
+  //   this.fetchCards()
+  // },
 }
 </script>
-
-<style scoped>
-</style>

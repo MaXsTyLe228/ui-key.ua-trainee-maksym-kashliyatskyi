@@ -12,7 +12,6 @@ export default {
                     //localStorage.refreshToken = res.data.token.refreshToken
                     localStorage.setItem('idToken', res.data.token.idToken)
                     await context.commit('signIn', res.data)
-                    console.log(localStorage.idToken)
                     await router.push('/trello-page')
                     context.commit('loadingStatus', false)
                 })

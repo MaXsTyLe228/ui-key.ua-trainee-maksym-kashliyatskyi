@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import {mapActions} from 'vuex';
 import Spinner from "../components/Spinner";
 
 export default {
@@ -27,11 +27,9 @@ export default {
     return {
       email: "",
       password: "",
-      info: this.getUserInfo
     }
   },
   computed: {
-    ...mapGetters(['getUserInfo']),
     loadingStatus() {
       return this.$store.getters.loadingStatus
     }

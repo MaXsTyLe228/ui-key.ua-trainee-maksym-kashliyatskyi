@@ -88,14 +88,10 @@ export default {
       };
     },
   },
-  // async beforeMount() {
-  //   await this.fetchCards()
-  // },
   data() {
     return {
       isDrag: false,
       changedCard: {},
-      cards: [],
       cardName: '',
       colName: this.title,
       showInput: false,
@@ -107,11 +103,11 @@ export default {
       'fetchCards', 'createCard', 'updateCard']),
     async update() {
       if (!this.isDrag)
-      await this.updateCol({
-        id: this.id,
-        title: this.colName,
-        index: this.index + ""
-      })
+        await this.updateCol({
+          id: this.id,
+          title: this.colName,
+          index: this.index + ""
+        })
     },
     async del() {
       await this.deleteCol(this.id)
@@ -170,7 +166,6 @@ export default {
     },
     async newIdCol() {
       this.isDrag = false;
-      console.log('card')
       let replaceIndex;
       this.cards = this.getCardsById(this.id)
       this.$store.state.newCol = this.id

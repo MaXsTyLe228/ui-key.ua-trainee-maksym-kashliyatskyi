@@ -75,7 +75,6 @@ export default {
   data() {
     return {
       changedCol: {},
-      cols: [],
       showInput: false,
       columnName: '',
       editable: true,
