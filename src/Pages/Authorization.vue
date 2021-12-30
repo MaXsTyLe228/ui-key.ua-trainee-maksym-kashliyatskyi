@@ -1,6 +1,9 @@
 <template>
   <div class="authorization">
-    <div class="login-page">
+    <div v-if="loadingStatus">
+      <Spinner/>
+    </div>
+    <div v-else class="login-page">
       <div class="form">
         <div class="text">Sign In</div>
         <div class="login-form">
@@ -15,26 +18,28 @@
 
 <script>
 import {mapActions, mapGetters} from 'vuex';
+import Spinner from "../components/Spinner";
 
 export default {
   name: 'Auth',
+  components: {Spinner},
   data() {
     return {
-      email: "kashlyatsky@gmail.com",
-      password: "05092001",
+      email: "",
+      password: "",
       info: this.getUserInfo
     }
   },
-  computed:{
-    ...mapGetters(['getUserInfo'])
+  computed: {
+    ...mapGetters(['getUserInfo']),
+    loadingStatus() {
+      return this.$store.getters.loadingStatus
+    }
   },
   methods: {
     ...mapActions(['signIn']),
     async isAuth() {
-      //console.log({email: this.email, password: this.password})
       await this.signIn({email: this.email, password: this.password})
-      //console.log(res)
-      //await this.$router.push('/trello-page')
     }
   }
 }

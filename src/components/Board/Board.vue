@@ -1,45 +1,45 @@
 <template>
-  <div class="content"
-  >
-    <div class="board">
-      <draggable
-          style="display: flex;"
-          v-bind="dragOptions"
-          @end="moveCol"
+  <div v-if="loadingStatus">
+    <Spinner/>
+  </div>
+  <div v-else class="board">
+    <draggable
+        style="display: flex;"
+        v-bind="dragOptions"
+        @end="moveCol"
+    >
+      <Column
+          @getDropped="dropped"
+          v-for="column in this.allCol"
+          :title="column.title"
+          :index="column.index"
+          :id="column.id"
+          :key="column.index"
+      />
+    </draggable>
+    <div class="addColContainer">
+      <b-button
+          v-if="!showInput"
+          variant="light"
+          class="addColumn"
+          @click="addColumn"
       >
-        <Column
-            @getDropped="dropped"
-            v-for="column in this.allCol"
-            :title="column.title"
-            :index="column.index"
-            :id="column.id"
-            :key="column.index"
-        />
-      </draggable>
-      <div class="addColContainer">
-        <b-button
-            v-if="!showInput"
-            variant="light"
-            class="addColumn"
-            @click="addColumn"
-        >
-          + Add Column
-        </b-button>
-        <b-button
-            v-if="showInput"
-            variant="primary"
-            class="addColumn"
-            @click="addColumn"
-        >
-          + Add Column
-        </b-button>
-        <b-form-input
-            v-if="showInput"
-            v-model="columnName"
-            class="inputColumn"
-            placeholder="Enter title for new Column"
-        />
-      </div>
+        + Add Column
+      </b-button>
+      <b-button
+          v-if="showInput"
+          variant="primary"
+          class="addColumn"
+          @click="addColumn"
+      >
+        + Add Column
+      </b-button>
+      <b-form-input
+          v-if="showInput"
+          v-model="columnName"
+          class="inputColumn"
+          placeholder="Enter title for new Column"
+      />
     </div>
   </div>
 </template>
@@ -48,13 +48,17 @@
 import Column from "./Column/Column";
 import {mapGetters, mapActions} from 'vuex';
 import draggable from "vuedraggable";
+import Spinner from "../Spinner";
 
 export default {
   name: 'Board',
-  components: {Column, draggable},
+  components: {Spinner, Column, draggable},
   computed: {
     ...mapGetters(['allCol', 'newColIndex', 'allIndexes',
       'minColIndex']),
+    loadingStatus() {
+      return this.$store.getters.loadingStatus
+    },
     dragOptions() {
       return {
         animation: 0,
@@ -64,9 +68,9 @@ export default {
       };
     },
   },
-  async beforeMount() {
-    await this.fetchCols()
-    await this.fetchCards()
+  async mounted() {
+    this.fetchCols()
+    this.fetchCards()
   },
   data() {
     return {
