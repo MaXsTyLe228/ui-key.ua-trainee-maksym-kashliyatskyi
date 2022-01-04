@@ -61,17 +61,18 @@ export default {
       await this.deleteCard(this.id)
     },
     async update() {
-      if (!this.isDrag)
-        await this.updateCard({
-          id: this.id,
-          title: this.cardName,
-          index: this.index,
-          description: this.description,
-          idCol: this.idCol,
-        })
+      if (this.$props.title !== this.cardName || this.$props.cardDescription !== this.description)
+        if (!this.isDrag)
+          await this.updateCard({
+            id: this.id,
+            title: this.cardName,
+            index: this.index,
+            description: this.description,
+            idCol: this.idCol,
+          })
     },
-    dragFalse(){
-      this.isDrag=false
+    dragFalse() {
+      this.isDrag = false
     },
     sendInfo() {
       this.isDrag = true

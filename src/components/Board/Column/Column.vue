@@ -102,12 +102,13 @@ export default {
     ...mapActions(['deleteCol', 'updateCol',
       'fetchCards', 'createCard', 'updateCard']),
     async update() {
-      if (!this.isDrag)
-        await this.updateCol({
-          id: this.id,
-          title: this.colName,
-          index: this.index + ""
-        })
+      if (this.$props.title !== this.colName)
+        if (!this.isDrag)
+          await this.updateCol({
+            id: this.id,
+            title: this.colName,
+            index: this.index + ""
+          })
     },
     async del() {
       await this.deleteCol(this.id)
