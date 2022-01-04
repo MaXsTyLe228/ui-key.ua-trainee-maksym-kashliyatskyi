@@ -54,7 +54,7 @@ export default {
   name: 'Board',
   components: {Spinner, Column, draggable},
   computed: {
-    ...mapGetters(['allCol', 'newColIndex', 'allIndexes',
+    ...mapGetters(['allCol', 'updateStatus', 'newColIndex', 'allIndexes',
       'minColIndex']),
     loadingStatus() {
       return this.$store.getters.loadingStatus
@@ -63,7 +63,7 @@ export default {
       return {
         animation: 0,
         group: "columns",
-        disabled: !this.editable,
+        disabled: this.updateStatus,
         ghostClass: "ghost"
       };
     },

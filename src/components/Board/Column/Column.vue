@@ -77,13 +77,13 @@ export default {
     title: String,
   },
   computed: {
-    ...mapGetters(['allCards', 'newCardIndex',
+    ...mapGetters(['allCards', 'updateStatus', 'newCardIndex',
       'getCardsById']),
     dragOptions() {
       return {
         animation: 0,
         group: "cards",
-        disabled: !this.editable,
+        disabled: this.updateStatus,
         ghostClass: "ghost"
       };
     },

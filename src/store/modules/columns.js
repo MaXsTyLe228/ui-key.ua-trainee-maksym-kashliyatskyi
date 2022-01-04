@@ -37,12 +37,12 @@ export default {
             const token = localStorage.getItem('idToken')
             axios.delete(PATH + '/deleteCol/' + id, {headers: {"Authorization": `Bearer ${token}`}})
                 .then(() => {
-                    context.commit('loadingStatus', false)
                     context.commit('deleteCol', id)
+                    context.commit('loadingStatus', false)
                 })
         },
         updateCol(context, params) {
-            context.commit('loadingStatus', true)
+            context.commit('updateStatus', true)
             const token = localStorage.getItem('idToken')
             const body = {
                 title: params.title,
@@ -52,7 +52,7 @@ export default {
                 JSON.stringify(body), {headers: {"Authorization": `Bearer ${token}`}})
                 .then(res => {
                     context.commit('updateCol', res.data.Attributes)
-                    context.commit('loadingStatus', false)
+                    context.commit('updateStatus', false)
                 })
         },
     },

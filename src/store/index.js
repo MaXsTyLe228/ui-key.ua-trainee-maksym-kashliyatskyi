@@ -13,14 +13,21 @@ export default new Vuex.Store({
         cognito,
     },
     state: {
-        loadingStatus: false
+        loadingStatus: false,
+        updateStatus: false
     },
     mutations: {
+        updateStatus(state, newUpdateStatus) {
+            state.updateStatus = newUpdateStatus
+        },
         loadingStatus(state, newLoadingStatus) {
             state.loadingStatus = newLoadingStatus
         }
     },
     getters: {
+        updateStatus(state) {
+            return state.updateStatus
+        },
         loadingStatus(state) {
             return state.loadingStatus
         }

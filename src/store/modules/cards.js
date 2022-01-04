@@ -39,7 +39,7 @@ export default {
                 })
         },
         updateCard(context, params) {
-            context.commit('loadingStatus', true)
+            context.commit('updateStatus', true)
             let token = localStorage.getItem('idToken')
             const body = {
                 title: params.title,
@@ -51,7 +51,7 @@ export default {
                 JSON.stringify(body), {headers: {"Authorization": `Bearer ${token}`}})
                 .then(res => {
                     context.commit('updateCard', res.data.Attributes)
-                    context.commit('loadingStatus', false)
+                    context.commit('updateStatus', false)
                 })
         }
     },
