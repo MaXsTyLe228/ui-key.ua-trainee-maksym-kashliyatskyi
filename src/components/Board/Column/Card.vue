@@ -33,6 +33,41 @@
     >
       {{ description }}
     </b-form-textarea>
+    <div v-if="this.file" class="buttons">
+      {{ this.fileName.substring(0, 22) + '..' }}
+      <b-button
+          variant="outline-secondary"
+          class="iconButtonFooter"
+      >
+        <b-icon-download
+            shift-h="-3"
+            shift-v="-1"
+            class="icon"
+        />
+      </b-button>
+      <b-button
+          variant="outline-secondary"
+          class="iconButtonFooter"
+      >
+        <b-icon-file-earmark-x
+            shift-h="-3"
+            shift-v="-1"
+            class="icon"
+        />
+      </b-button>
+    </div>
+    <div v-else class="buttons">
+      <b-button
+          variant="outline-secondary"
+          class="iconButtonFooter"
+      >
+        <b-icon-plus-circle
+            shift-h="-3"
+            shift-v="-1"
+            class="icon"
+        />
+      </b-button>
+    </div>
   </b-card>
 </template>
 
@@ -50,6 +85,8 @@ export default {
   },
   data() {
     return {
+      file: true,
+      fileName: 'file2',
       isDrag: false,
       description: this.cardDescription,
       cardName: this.title,
@@ -128,12 +165,24 @@ export default {
   border-radius: 20px;
 }
 
+.iconButtonFooter {
+  border: none;
+  height: 35px;
+  width: 35px;
+  margin-top: 14px;
+  border-radius: 20px;
+}
+
 .textArea {
   border-radius: 20px;
   width: 16.5rem;
   font-size: 14px;
   margin-left: -16px;
   margin-bottom: -16px;
+}
+
+.buttons {
+  margin: -15px;
 }
 
 .cardHeader {
