@@ -35,13 +35,7 @@ export default {
                   this.$store.state.columns = [],
                   this.$store.state.cards = [],
                   router.push('/sign-in')
-          )
-          :
-          (
-              this.status = 'Sign in',
-                  this.avatar = '',
-                  this.username = ''
-          )
+          ) : 0
     }
   }
 }

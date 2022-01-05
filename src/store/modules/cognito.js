@@ -9,8 +9,9 @@ export default {
             axios.post(PATH + '/signIn', JSON.stringify(params))
                 .then(async res => {
                     //localStorage.accessToken = res.data.token.accessToken
-                    //localStorage.refreshToken = res.data.token.refreshToken
                     localStorage.setItem('idToken', res.data.token.idToken)
+                    localStorage.refreshToken = res.data.token.refreshToken
+                    localStorage.setItem('expTime', res.data.exp)
                     await context.commit('signIn', res.data)
                     await router.push('/trello-page')
                     context.commit('loadingStatus', false)
@@ -19,7 +20,7 @@ export default {
                     context.commit('loadingStatus', false)
                     console.log('You cannot enter')
                 })
-        }
+        },
     },
     mutations: {
         signIn(state, data) {

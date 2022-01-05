@@ -1,16 +1,16 @@
-import axios from "axios";
-import {PATH} from "../consts";
+//import axios from "axios";
+import api from "./../../axios";
 import router from "../../router/routes";
-
+/*const token = localStorage.getItem('idToken')
+* {headers: {"Authorization": `Bearer ${token}`}}*/
 export default {
     actions: {
         fetchCols(context) {
             context.commit('loadingStatus', true)
-            const token = localStorage.getItem('idToken')
-            axios.get(PATH + '/columns', {headers: {"Authorization": `Bearer ${token}`}})
+            api.get('/columns')
                 .then(res => {
-                    context.commit('loadingStatus', false)
                     context.commit('getCols', res.data.Items)
+                    context.commit('loadingStatus', false)
                 })
                 .catch(() => {
                     context.commit('loadingStatus', false)
@@ -19,9 +19,7 @@ export default {
         },
         createCol(context, params) {
             context.commit('loadingStatus', true)
-            const token = localStorage.getItem('idToken')
-            axios.post(PATH + '/createColumn',
-                JSON.stringify(params), {headers: {"Authorization": `Bearer ${token}`}})
+            api.post('/createColumn', JSON.stringify(params))
                 .then(() => {
                     context.commit('addCol',
                         {
@@ -34,8 +32,7 @@ export default {
         },
         deleteCol(context, id) {
             context.commit('loadingStatus', true)
-            const token = localStorage.getItem('idToken')
-            axios.delete(PATH + '/deleteCol/' + id, {headers: {"Authorization": `Bearer ${token}`}})
+            api.delete('/deleteCol/' + id)
                 .then(() => {
                     context.commit('deleteCol', id)
                     context.commit('loadingStatus', false)
@@ -43,13 +40,12 @@ export default {
         },
         updateCol(context, params) {
             context.commit('updateStatus', true)
-            const token = localStorage.getItem('idToken')
             const body = {
                 title: params.title,
                 index: params.index
             }
-            axios.put(PATH + '/updateCol/' + params.id,
-                JSON.stringify(body), {headers: {"Authorization": `Bearer ${token}`}})
+            api.put('/updateCol/' + params.id,
+                JSON.stringify(body))
                 .then(res => {
                     context.commit('updateCol', res.data.Attributes)
                     context.commit('updateStatus', false)

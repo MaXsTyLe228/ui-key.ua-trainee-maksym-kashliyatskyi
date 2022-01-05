@@ -1,22 +1,21 @@
-import axios from "axios";
-import {PATH} from "../consts";
-
+import api from "./../../axios";
+//import {PATH} from "../consts";
+/*let token = localStorage.getItem('idToken')
+{headers: {"Authorization": `Bearer ${token}`}}*/
 export default {
     actions: {
         fetchCards(context) {
             context.commit('loadingStatus', true)
-            let token = localStorage.getItem('idToken')
-            axios.get(PATH + '/cards', {headers: {"Authorization": `Bearer ${token}`}})
+            api.get('/cards')
                 .then(res => {
-                    context.commit('loadingStatus', false)
                     context.commit('getCards', res.data.Items)
+                    context.commit('loadingStatus', false)
                 })
         },
         createCard(context, params) {
             context.commit('loadingStatus', true)
-            let token = localStorage.getItem('idToken')
-            axios.post(PATH + '/createCard',
-                JSON.stringify(params), {headers: {"Authorization": `Bearer ${token}`}})
+            //let token = localStorage.getItem('idToken')
+            api.post('/createCard', JSON.stringify(params))
                 .then(() => {
                     context.commit('addCard',
                         {
@@ -31,8 +30,7 @@ export default {
         },
         deleteCard(context, id) {
             context.commit('loadingStatus', true)
-            let token = localStorage.getItem('idToken')
-            axios.delete(PATH + '/deleteCard/' + id, {headers: {"Authorization": `Bearer ${token}`}})
+            api.delete('/deleteCard/' + id)
                 .then(() => {
                     context.commit('deleteCard', id)
                     context.commit('loadingStatus', false)
@@ -40,15 +38,13 @@ export default {
         },
         updateCard(context, params) {
             context.commit('updateStatus', true)
-            let token = localStorage.getItem('idToken')
             const body = {
                 title: params.title,
                 index: params.index,
                 description: params.description,
                 idCol: params.idCol,
             }
-            axios.put(PATH + '/updateCard/' + params.id,
-                JSON.stringify(body), {headers: {"Authorization": `Bearer ${token}`}})
+            api.put('/updateCard/' + params.id, JSON.stringify(body))
                 .then(res => {
                     context.commit('updateCard', res.data.Attributes)
                     context.commit('updateStatus', false)
