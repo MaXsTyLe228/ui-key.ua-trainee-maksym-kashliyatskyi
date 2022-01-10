@@ -57,16 +57,14 @@
       </b-button>
     </div>
     <div v-else class="buttons">
-      <b-button
-          variant="outline-secondary"
-          class="iconButtonFooter"
-      >
-        <b-icon-plus-circle
-            shift-h="-3"
-            shift-v="-1"
-            class="icon"
-        />
-      </b-button>
+      <b-form-file
+          v-model="file1"
+          :state="Boolean(file1)"
+          placeholder="Choose a file or drop it here..."
+          drop-placeholder="Drop file here..."
+
+          class="file-small"
+      ></b-form-file>
     </div>
   </b-card>
 </template>
@@ -85,7 +83,8 @@ export default {
   },
   data() {
     return {
-      file: true,
+      file1: null,
+      file: false,
       fileName: 'file2',
       isDrag: false,
       description: this.cardDescription,
@@ -162,6 +161,11 @@ export default {
   width: 35px;
   margin-top: -14px;
   margin-right: -10px;
+  border-radius: 20px;
+}
+
+.file-small {
+  margin-top: 20px;
   border-radius: 20px;
 }
 

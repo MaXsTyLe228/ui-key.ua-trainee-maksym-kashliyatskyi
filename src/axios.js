@@ -13,7 +13,7 @@ function getLocalIdToken() {
 
 const refresh = async () => {
     const expTime = +localStorage.getItem('expTime')
-    if ((expTime - Math.floor(Date.now() / 1000)) < 500) {
+    if ((expTime - Math.floor(Date.now() / 1000)) < 1000) {
         const refreshToken = localStorage.getItem('refreshToken')
         axios.post(PATH + '/refresh', JSON.stringify({refreshToken: refreshToken}))
             .then(async res => {
