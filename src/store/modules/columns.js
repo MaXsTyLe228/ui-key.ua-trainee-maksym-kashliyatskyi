@@ -42,7 +42,6 @@ export default {
                 }).catch(async () => {
                 context.commit('loadingStatus', false)
                 await router.push('/trello-page')
-                alert('happened error')
             })
         },
         updateCol(context, params) {
