@@ -62,7 +62,6 @@
           :state="Boolean(file1)"
           placeholder="Choose a file or drop it here..."
           drop-placeholder="Drop file here..."
-
           class="file-small"
       ></b-form-file>
     </div>
@@ -187,6 +186,7 @@ export default {
 
 .buttons {
   margin: -15px;
+  border-radius: 50px
 }
 
 .cardHeader {
@@ -195,7 +195,7 @@ export default {
 }
 
 .card {
-  border-radius: 20px;
+  border-radius: 5px;
   width: 17rem;
   margin-bottom: 5px;
 }

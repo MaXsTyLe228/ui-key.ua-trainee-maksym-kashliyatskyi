@@ -12,6 +12,7 @@ export default {
                     context.commit('getCards', res.data.Items)
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
                 await router.push('/trello-page')
             })
@@ -31,6 +32,7 @@ export default {
                         })
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
                 await router.push('/trello-page')
             })
@@ -42,6 +44,7 @@ export default {
                     context.commit('deleteCard', id)
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
                 await router.push('/trello-page')
             })
@@ -59,6 +62,7 @@ export default {
                     context.commit('updateCard', res.data.Attributes)
                     context.commit('updateStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
                 await router.push('/trello-page')
             })

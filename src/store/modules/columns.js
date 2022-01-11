@@ -13,6 +13,7 @@ export default {
                     context.commit('loadingStatus', false)
                 })
                 .catch(() => {
+                    console.log('error')
                     context.commit('loadingStatus', false)
                     router.push('/sign-in')
                 });
@@ -29,6 +30,7 @@ export default {
                         })
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
                 await router.push('/trello-page')
             })
@@ -40,6 +42,7 @@ export default {
                     context.commit('deleteCol', id)
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
                 await router.push('/trello-page')
             })
@@ -56,6 +59,7 @@ export default {
                     context.commit('updateCol', res.data.Attributes)
                     context.commit('updateStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
                 await router.push('/trello-page')
             })
