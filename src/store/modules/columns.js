@@ -28,7 +28,10 @@ export default {
                             index: params.index,
                         })
                     context.commit('loadingStatus', false)
-                })
+                }).catch(async () => {
+                context.commit('loadingStatus', false)
+                await router.push('/trello-page')
+            })
         },
         deleteCol(context, id) {
             context.commit('loadingStatus', true)
@@ -36,7 +39,11 @@ export default {
                 .then(() => {
                     context.commit('deleteCol', id)
                     context.commit('loadingStatus', false)
-                })
+                }).catch(async () => {
+                context.commit('loadingStatus', false)
+                await router.push('/trello-page')
+                alert('happened error')
+            })
         },
         updateCol(context, params) {
             context.commit('updateStatus', true)
@@ -49,7 +56,10 @@ export default {
                 .then(res => {
                     context.commit('updateCol', res.data.Attributes)
                     context.commit('updateStatus', false)
-                })
+                }).catch(async () => {
+                context.commit('loadingStatus', false)
+                await router.push('/trello-page')
+            })
         },
     },
 

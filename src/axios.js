@@ -7,8 +7,8 @@ const instance = axios.create({
 })
 
 function getLocalIdToken() {
-    const accessToken = localStorage.getItem("idToken");
-    return accessToken;
+    const idToken = localStorage.getItem("idToken");
+    return idToken;
 }
 
 const refresh = async () => {
@@ -27,8 +27,10 @@ const refresh = async () => {
             })
     }
 }
+
 instance.interceptors.request.use(
     async config => {
+        await refresh()
         try {
             const token = getLocalIdToken();
             //console.log(token)
@@ -37,6 +39,7 @@ instance.interceptors.request.use(
             }
             return config;
         } catch (e) {
+            await refresh()
             console.log(e)
         }
     }
@@ -47,11 +50,17 @@ instance.interceptors.response.use(async function (response) {
     await refresh()
     // Any status code within the range of 2xx cause this function to trigger
     // Do something with response data
+
     return response;
-}, function (error) {
+}, async function (error) {
     console.log(error);
     // Any status codes outside the range of 2xx cause this function to trigger
     // Do something with response error
+    if(error.response.status === 401) {
+        await refresh()
+        await router.push('/trello-page')
+        console.log("You are not authorized");
+    }
     return Promise.reject(error);
 });
 

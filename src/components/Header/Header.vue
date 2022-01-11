@@ -32,6 +32,8 @@ export default {
                   this.username = 'Maks',
                   this.$store.state.login = !this.$store.state.login,
                   localStorage.removeItem('idToken'),
+                  localStorage.removeItem('refreshToken'),
+                  localStorage.removeItem('expTime'),
                   this.$store.state.columns = [],
                   this.$store.state.cards = [],
                   router.push('/sign-in')

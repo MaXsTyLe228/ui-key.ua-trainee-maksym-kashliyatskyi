@@ -1,4 +1,5 @@
 import api from "./../../axios";
+import router from "../../router/routes";
 //import {PATH} from "../consts";
 /*let token = localStorage.getItem('idToken')
 {headers: {"Authorization": `Bearer ${token}`}}*/
@@ -10,7 +11,10 @@ export default {
                 .then(res => {
                     context.commit('getCards', res.data.Items)
                     context.commit('loadingStatus', false)
-                })
+                }).catch(async () => {
+                context.commit('loadingStatus', false)
+                await router.push('/trello-page')
+            })
         },
         createCard(context, params) {
             context.commit('loadingStatus', true)
@@ -26,7 +30,10 @@ export default {
                             idCol: params.idCol,
                         })
                     context.commit('loadingStatus', false)
-                })
+                }).catch(async () => {
+                context.commit('loadingStatus', false)
+                await router.push('/trello-page')
+            })
         },
         deleteCard(context, id) {
             context.commit('loadingStatus', true)
@@ -34,7 +41,10 @@ export default {
                 .then(() => {
                     context.commit('deleteCard', id)
                     context.commit('loadingStatus', false)
-                })
+                }).catch(async () => {
+                context.commit('loadingStatus', false)
+                await router.push('/trello-page')
+            })
         },
         updateCard(context, params) {
             context.commit('updateStatus', true)
@@ -48,7 +58,10 @@ export default {
                 .then(res => {
                     context.commit('updateCard', res.data.Attributes)
                     context.commit('updateStatus', false)
-                })
+                }).catch(async () => {
+                context.commit('loadingStatus', false)
+                await router.push('/trello-page')
+            })
         }
     },
     mutations: {
