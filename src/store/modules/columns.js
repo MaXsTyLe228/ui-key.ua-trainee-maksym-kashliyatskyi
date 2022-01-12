@@ -60,6 +60,7 @@ export default {
                     context.commit('updateStatus', false)
                 }).catch(async () => {
                 console.log('error')
+                location.reload();
                 context.commit('loadingStatus', false)
                 await router.push('/trello-page')
             })

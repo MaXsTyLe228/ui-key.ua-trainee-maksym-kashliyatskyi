@@ -36,6 +36,7 @@
           :cardDescription="card.description"
           :index="card.index"
           :idCol="card.idCol"
+          :file="card.file"
       />
     </draggable>
     <b-button
@@ -259,7 +260,7 @@ export default {
   width: 42px;
   margin-top: -14px;
   margin-right: -10px;
-  border-radius: 20px;
+  border-radius: 5px;
 }
 
 .colName {
@@ -267,7 +268,7 @@ export default {
   margin-bottom: 10px;
   margin-top: -15px;
   margin-left: -15px;
-  border-radius: 20px;
+  border-radius: 5px;
   border: none;
 }
 
@@ -275,12 +276,12 @@ export default {
   display: flex;
   height: fit-content;
   font-size: 1rem;
-  max-width: 18rem;
+  max-width: 19rem;
   max-height: 87vh;
   min-width: 18rem !important;
   overflow-y: auto;
   scroll-snap-type: x proximity;
-  border-radius: 20px;
+  border-radius: 5px;
 }
 
 .ghost {
@@ -288,7 +289,7 @@ export default {
 }
 
 .inputColumn {
-  border-radius: 20px;
+  border-radius: 5px;
   height: 40px;
   margin-top: 10px;
   width: 17rem;
@@ -296,7 +297,7 @@ export default {
 }
 
 .addCard {
-  border-radius: 20px;
+  border-radius: 5px;
   height: 40px;
   width: 17rem;
   margin-left: -15px;

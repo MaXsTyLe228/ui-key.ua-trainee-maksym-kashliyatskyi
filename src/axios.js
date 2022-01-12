@@ -16,10 +16,11 @@ const refresh = async () => {
     if ((expTime - Math.floor(Date.now() / 1000)) < 1000) {
         const refreshToken = localStorage.getItem('refreshToken')
         axios.post(PATH + '/refresh', JSON.stringify({refreshToken: refreshToken}))
-            .then(async res => {
+            .then(res => {
                 localStorage.refreshToken = res.data.token.refreshToken
                 localStorage.setItem('idToken', res.data.token.idToken)
                 localStorage.setItem('expTime', res.data.exp)
+                router.push('/trello-page')
             })
             .catch(() => {
                 router.push('/sign-in')

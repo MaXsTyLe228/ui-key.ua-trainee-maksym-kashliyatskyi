@@ -1,5 +1,6 @@
 import api from "./../../axios";
 import router from "../../router/routes";
+import axios from "axios";
 //import {PATH} from "../consts";
 /*let token = localStorage.getItem('idToken')
 {headers: {"Authorization": `Bearer ${token}`}}*/
@@ -63,8 +64,27 @@ export default {
                     context.commit('updateStatus', false)
                 }).catch(async () => {
                 console.log('error')
+                location.reload();
                 context.commit('loadingStatus', false)
                 await router.push('/trello-page')
+            })
+        },
+        async deleteFile(context, params) {
+            axios.post('http://localhost:3000/dev' + '/deleteObject',
+                JSON.stringify(params)).then(() => {
+                context.commit('deleteFile', params)
+            })
+        },
+        async putFile(context, params) {
+            const body = {
+                filename: params.filename,
+                idCard: params.idCard
+            };
+            axios.post('http://localhost:3000/dev' + '/putObject',
+                JSON.stringify(body)).then(async res => {
+                //console.log(res)
+                await axios.put(res.data.url, params.file);
+                context.commit('putFile', params)
             })
         }
     },
@@ -85,6 +105,14 @@ export default {
             state.cards[updatedCol].description = params.description;
             state.cards[updatedCol].idCol = params.idCol;
         },
+        deleteFile(state, params) {
+            let updatedCard = state.cards.findIndex(item => item.id === params.idCard);
+            delete state.cards[updatedCard].file
+        },
+        putFile(state, params) {
+            let updatedCard = state.cards.findIndex(item => item.id === params.idCard);
+            state.cards[updatedCard].file = params.filename
+        }
     },
     state: {
         cards: [],
