@@ -70,12 +70,15 @@ export default {
             })
         },
         async deleteFile(context, params) {
+            context.commit('loadFile', {fileStatus: true, id: params.idCard})
             axios.post('http://localhost:3000/dev' + '/deleteObject',
                 JSON.stringify(params)).then(() => {
                 context.commit('deleteFile', params)
+                context.commit('loadFile', {fileStatus: false, id: params.idCard})
             })
         },
         async putFile(context, params) {
+            context.commit('loadFile', {fileStatus: true, id: params.idCard})
             const body = {
                 filename: params.filename,
                 idCard: params.idCard
@@ -83,12 +86,17 @@ export default {
             axios.post('http://localhost:3000/dev' + '/putObject',
                 JSON.stringify(body)).then(async res => {
                 //console.log(res)
-                await axios.put(res.data.url, params.file);
+                await axios.put(res.data.url, params.file)
+                    .then(() => context.commit('loadFile', {fileStatus: false, id: params.idCard}));
                 context.commit('putFile', params)
             })
         }
     },
     mutations: {
+        loadFile(state, params) {
+            state.s3loader = params.fileStatus
+            state.fileCard = params.id
+        },
         getCards(state, cards) {
             state.cards = cards;
         },
@@ -115,6 +123,8 @@ export default {
         }
     },
     state: {
+        s3loader: false,
+        fileCard: 0,
         cards: [],
         changeCard: {},
         newCol: Number,
@@ -153,6 +163,9 @@ export default {
                     max = +state.cards[i].index
             }
             return max + 0.00001;
+        },
+        getFileStatus(state) {
+            return {status: state.s3loader, card: state.fileCard}
         }
     },
 }

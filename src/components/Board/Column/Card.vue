@@ -33,7 +33,10 @@
     >
       {{ description }}
     </b-form-textarea>
-    <div v-if="this.filename" class="buttons">
+    <div v-if="fileStatus" class="fileStatus">
+      <b-spinner class="spinner"/>
+    </div>
+    <div v-else-if="this.filename" class="buttons">
       {{ this.filename.substring(0, 22) + '..' }}
       <b-button
           variant="outline-secondary"
@@ -83,6 +86,15 @@ export default {
     index: String,
     idCol: Number,
     file: String,
+  },
+  computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
+    fileStatus() {
+      const data = (this.$store.getters.getFileStatus)
+      if (data.card === this.id) {
+        return data.status
+      }
+    },
   },
   data() {
     return {
@@ -168,6 +180,11 @@ export default {
 .addFileButton {
   margin-bottom: 10px;
   margin-top: 10px;
+}
+
+.fileStatus {
+  margin-top: 20px;
+  margin-bottom: -10px;
 }
 
 .cardName {
