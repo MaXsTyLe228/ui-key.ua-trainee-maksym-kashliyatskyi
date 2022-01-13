@@ -15,7 +15,7 @@ const refresh = async () => {
     const expTime = +localStorage.getItem('expTime')
     if ((expTime - Math.floor(Date.now() / 1000)) < 1000) {
         const refreshToken = localStorage.getItem('refreshToken')
-        axios.post(PATH + '/refresh', JSON.stringify({refreshToken: refreshToken}))
+        await axios.post(PATH + '/refresh', JSON.stringify({refreshToken: refreshToken}))
             .then(res => {
                 localStorage.refreshToken = res.data.token.refreshToken
                 localStorage.setItem('idToken', res.data.token.idToken)
@@ -57,9 +57,8 @@ instance.interceptors.response.use(async function (response) {
     console.log(error);
     // Any status codes outside the range of 2xx cause this function to trigger
     // Do something with response error
-    if(error.response.status === 401) {
+    if (error.response.status === 401) {
         await refresh()
-        await router.push('/trello-page')
         console.log("You are not authorized");
     }
     return Promise.reject(error);

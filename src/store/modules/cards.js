@@ -1,5 +1,5 @@
 import api from "./../../axios";
-import router from "../../router/routes";
+//import router from "../../router/routes";
 import axios from "axios";
 //import {PATH} from "../consts";
 /*let token = localStorage.getItem('idToken')
@@ -15,7 +15,6 @@ export default {
                 }).catch(async () => {
                 console.log('error')
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
         createCard(context, params) {
@@ -35,7 +34,6 @@ export default {
                 }).catch(async () => {
                 console.log('error')
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
         deleteCard(context, id) {
@@ -47,7 +45,6 @@ export default {
                 }).catch(async () => {
                 console.log('error')
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
         updateCard(context, params) {
@@ -66,7 +63,6 @@ export default {
                 console.log('error')
                 location.reload();
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
         async deleteFile(context, params) {

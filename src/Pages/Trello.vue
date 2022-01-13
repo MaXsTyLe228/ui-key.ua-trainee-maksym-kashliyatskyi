@@ -15,9 +15,5 @@ export default {
     Header,
     Board,
   },
-  // mounted() {
-  //   this.fetchCols()
-  //   this.fetchCards()
-  // },
 }
 </script>

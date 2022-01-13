@@ -32,7 +32,6 @@ export default {
                 }).catch(async () => {
                 console.log('error')
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
         deleteCol(context, id) {
@@ -44,7 +43,6 @@ export default {
                 }).catch(async () => {
                 console.log('error')
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
         updateCol(context, params) {
@@ -62,7 +60,6 @@ export default {
                 console.log('error')
                 location.reload();
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
     },
