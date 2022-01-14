@@ -3,11 +3,13 @@ import Vuex from "vuex";
 import columns from './modules/columns'
 import cards from './modules/cards'
 import cognito from "./modules/cognito";
+import s3 from "./modules/s3";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     modules: {
+        s3,
         columns,
         cards,
         cognito,

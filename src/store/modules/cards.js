@@ -1,8 +1,6 @@
 import api from "./../../axios";
-import router from "../../router/routes";
-//import {PATH} from "../consts";
-/*let token = localStorage.getItem('idToken')
-{headers: {"Authorization": `Bearer ${token}`}}*/
+import axios from "axios";
+
 export default {
     actions: {
         fetchCards(context) {
@@ -13,12 +11,10 @@ export default {
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
         createCard(context, params) {
             context.commit('loadingStatus', true)
-            //let token = localStorage.getItem('idToken')
             api.post('/createCard', JSON.stringify(params))
                 .then(() => {
                     context.commit('addCard',
@@ -31,8 +27,8 @@ export default {
                         })
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
         deleteCard(context, id) {
@@ -42,8 +38,8 @@ export default {
                     context.commit('deleteCard', id)
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
         updateCard(context, params) {
@@ -59,12 +55,38 @@ export default {
                     context.commit('updateCard', res.data.Attributes)
                     context.commit('updateStatus', false)
                 }).catch(async () => {
+                console.log('error')
+                location.reload();
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
+            })
+        },
+        async deleteFile(context, params) {
+            context.commit('loadFile', {fileStatus: true, id: params.idCard})
+            api.post('/deleteObject',
+                JSON.stringify(params)).then(() => {
+                context.commit('deleteFile', params)
+                context.commit('loadFile', {fileStatus: false, id: params.idCard})
+            })
+        },
+        async putFile(context, params) {
+            context.commit('loadFile', {fileStatus: true, id: params.idCard})
+            const body = {
+                filename: params.filename,
+                idCard: params.idCard
+            };
+            api.post('/putObject',
+                JSON.stringify(body)).then(async res => {
+                await axios.put(res.data.url, params.file)
+                    .then(() => context.commit('loadFile', {fileStatus: false, id: params.idCard}));
+                context.commit('putFile', params)
             })
         }
     },
     mutations: {
+        loadFile(state, params) {
+            state.s3loader = params.fileStatus
+            state.fileCard = params.id
+        },
         getCards(state, cards) {
             state.cards = cards;
         },
@@ -81,8 +103,18 @@ export default {
             state.cards[updatedCol].description = params.description;
             state.cards[updatedCol].idCol = params.idCol;
         },
+        deleteFile(state, params) {
+            let updatedCard = state.cards.findIndex(item => item.id === params.idCard);
+            delete state.cards[updatedCard].file
+        },
+        putFile(state, params) {
+            let updatedCard = state.cards.findIndex(item => item.id === params.idCard);
+            state.cards[updatedCard].file = params.filename
+        }
     },
     state: {
+        s3loader: false,
+        fileCard: 0,
         cards: [],
         changeCard: {},
         newCol: Number,
@@ -121,6 +153,9 @@ export default {
                     max = +state.cards[i].index
             }
             return max + 0.00001;
+        },
+        getFileStatus(state) {
+            return {status: state.s3loader, card: state.fileCard}
         }
     },
 }

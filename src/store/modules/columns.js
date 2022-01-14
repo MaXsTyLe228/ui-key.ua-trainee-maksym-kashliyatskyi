@@ -1,6 +1,6 @@
 //import axios from "axios";
 import api from "./../../axios";
-import router from "../../router/routes";
+//import router from "../../router/routes";
 /*const token = localStorage.getItem('idToken')
 * {headers: {"Authorization": `Bearer ${token}`}}*/
 export default {
@@ -14,7 +14,6 @@ export default {
                 })
                 .catch(() => {
                     context.commit('loadingStatus', false)
-                    router.push('/sign-in')
                 });
         },
         createCol(context, params) {
@@ -29,8 +28,8 @@ export default {
                         })
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
         deleteCol(context, id) {
@@ -40,9 +39,8 @@ export default {
                     context.commit('deleteCol', id)
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
+                console.log('error')
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
-                alert('happened error')
             })
         },
         updateCol(context, params) {
@@ -57,8 +55,9 @@ export default {
                     context.commit('updateCol', res.data.Attributes)
                     context.commit('updateStatus', false)
                 }).catch(async () => {
+                console.log('error')
+                location.reload();
                 context.commit('loadingStatus', false)
-                await router.push('/trello-page')
             })
         },
     },

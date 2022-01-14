@@ -8,7 +8,6 @@ export default {
             context.commit('loadingStatus', true)
             axios.post(PATH + '/signIn', JSON.stringify(params))
                 .then(async res => {
-                    //localStorage.accessToken = res.data.token.accessToken
                     localStorage.setItem('idToken', res.data.token.idToken)
                     localStorage.refreshToken = res.data.token.refreshToken
                     localStorage.setItem('expTime', res.data.exp)
@@ -18,7 +17,6 @@ export default {
                 })
                 .catch(() => {
                     context.commit('loadingStatus', false)
-                    console.log('You cannot enter')
                 })
         },
     },

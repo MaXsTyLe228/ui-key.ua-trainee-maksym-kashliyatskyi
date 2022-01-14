@@ -141,7 +141,7 @@ div {
 .addColContainer {
   height: fit-content;
   background: ghostwhite;
-  border-radius: 20px;
+  border-radius: 5px;
 }
 
 .ghost {
@@ -152,13 +152,13 @@ div {
   height: 40px;
   width: 16rem;
   margin: 10px;
-  border-radius: 20px;
+  border-radius: 5px;
 }
 
 .addColumn {
   height: 40px;
   width: 16rem;
   margin: 10px;
-  border-radius: 20px;
+  border-radius: 5px;
 }
 </style>

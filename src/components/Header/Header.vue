@@ -34,8 +34,6 @@ export default {
                   localStorage.removeItem('idToken'),
                   localStorage.removeItem('refreshToken'),
                   localStorage.removeItem('expTime'),
-                  this.$store.state.columns = [],
-                  this.$store.state.cards = [],
                   router.push('/sign-in')
           ) : 0
     }
