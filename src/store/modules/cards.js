@@ -1,9 +1,6 @@
 import api from "./../../axios";
-//import router from "../../router/routes";
 import axios from "axios";
-//import {PATH} from "../consts";
-/*let token = localStorage.getItem('idToken')
-{headers: {"Authorization": `Bearer ${token}`}}*/
+
 export default {
     actions: {
         fetchCards(context) {
@@ -18,7 +15,6 @@ export default {
         },
         createCard(context, params) {
             context.commit('loadingStatus', true)
-            //let token = localStorage.getItem('idToken')
             api.post('/createCard', JSON.stringify(params))
                 .then(() => {
                     context.commit('addCard',
@@ -66,7 +62,7 @@ export default {
         },
         async deleteFile(context, params) {
             context.commit('loadFile', {fileStatus: true, id: params.idCard})
-            axios.post('http://localhost:3000/dev' + '/deleteObject',
+            api.post('/deleteObject',
                 JSON.stringify(params)).then(() => {
                 context.commit('deleteFile', params)
                 context.commit('loadFile', {fileStatus: false, id: params.idCard})
@@ -78,9 +74,8 @@ export default {
                 filename: params.filename,
                 idCard: params.idCard
             };
-            axios.post('http://localhost:3000/dev' + '/putObject',
+            api.post('/putObject',
                 JSON.stringify(body)).then(async res => {
-                //console.log(res)
                 await axios.put(res.data.url, params.file)
                     .then(() => context.commit('loadFile', {fileStatus: false, id: params.idCard}));
                 context.commit('putFile', params)

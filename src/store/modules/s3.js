@@ -1,14 +1,11 @@
-//import api from "./../../axios";
-import axios from "axios";
-// import {PATH} from "../consts";
-// import router from "../../router/routes";
+import api from "./../../axios";
 
 export default {
     actions: {
-        async getFile(context, filename) {
+        getFile(context, filename) {
             const body = {filename: filename}
-            axios.post('http://localhost:3000/dev' + '/getObject', JSON.stringify(body))
-                .then(async res => {
+            api.post('/getObject', JSON.stringify(body))
+                .then(res => {
                     window.open(res.data)
                 })
         },
