@@ -110,10 +110,10 @@ export default {
     async del() {
       await this.deleteCard(this.id)
     },
-    async putFileUrl() {
+    putFileUrl() {
       if (this.file1) {
         //console.log(this.file1)
-        await this.putFile({filename: this.file1.name, idCard: this.id, file: this.file1})
+        this.putFile({filename: this.file1.name, idCard: this.id, file: this.file1})
             .then(this.filename = this.file1.name)
       }
     },

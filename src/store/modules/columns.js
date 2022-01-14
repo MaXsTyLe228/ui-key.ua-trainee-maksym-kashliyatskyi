@@ -1,6 +1,6 @@
 //import axios from "axios";
 import api from "./../../axios";
-import router from "../../router/routes";
+//import router from "../../router/routes";
 /*const token = localStorage.getItem('idToken')
 * {headers: {"Authorization": `Bearer ${token}`}}*/
 export default {
@@ -13,9 +13,7 @@ export default {
                     context.commit('loadingStatus', false)
                 })
                 .catch(() => {
-                    console.log('error')
                     context.commit('loadingStatus', false)
-                    router.push('/sign-in')
                 });
         },
         createCol(context, params) {

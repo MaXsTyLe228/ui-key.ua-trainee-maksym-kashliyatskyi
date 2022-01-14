@@ -13,7 +13,6 @@ export default {
                     context.commit('getCards', res.data.Items)
                     context.commit('loadingStatus', false)
                 }).catch(async () => {
-                console.log('error')
                 context.commit('loadingStatus', false)
             })
         },
