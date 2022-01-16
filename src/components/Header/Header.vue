@@ -9,6 +9,7 @@
 
 <script>
 import User from "./User";
+import router from "../../../src/router/routes"
 
 export default {
   name: 'Header',
@@ -17,25 +18,28 @@ export default {
   },
   data() {
     return {
-      status: 'Sign in',
-      username: '',
-      avatar: '',
+      status: 'Logout',
+      username: 'Maks',
+      avatar: 'https://placekitten.com/300/300',
     }
   },
   methods: {
     authorization() {
-      return this.status === 'Sign in' ?
-          (this.status = 'Log out',
-              this.avatar = 'https://placekitten.com/300/300',
-              this.username = 'Maks')
-          : (this.status = 'Sign in',
-              this.avatar = '',
-              this.username = '')
+      return localStorage.idToken ?
+          (
+              this.status = 'Logout',
+                  this.avatar = 'https://placekitten.com/300/300',
+                  this.username = 'Maks',
+                  this.$store.state.login = !this.$store.state.login,
+                  localStorage.removeItem('idToken'),
+                  localStorage.removeItem('refreshToken'),
+                  localStorage.removeItem('expTime'),
+                  router.push('/sign-in')
+          ) : 0
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>

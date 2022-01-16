@@ -2,10 +2,13 @@
   <b-card
       class="column"
       bg-variant="light"
+      @dragstart="sendInfo"
+      @dragend="newIdCol"
   >
     <div class="cardHeader">
       <b-form-input
           v-model="colName"
+          @keyup.enter="update"
           @blur="update"
           placeholder="Column"
           class="colName"
@@ -18,23 +21,24 @@
         <b-icon-trash/>
       </b-button>
     </div>
-    <Card
-        v-for="card in this.getCardsById(this.id)
-        .sort((a, b) => {
-                if (a.index > b.index)
-                    return 1;
-                if (a.index < b.index)
-                    return -1;
-                // a должно быть равным b
-                return 0;
-            })"
-        :title="card.title"
-        :id="card.id"
-        :key="card.id"
-        :cardDescription="card.description"
-        :index="card.index"
-        :idCol="card.idCol"
-    />
+    <draggable
+        valid-v-model="getCardsById(this.id)"
+        @end="moveCard"
+        class="drag"
+        v-bind="dragOptions"
+    >
+      <Card
+          @cardDrop="dropped"
+          v-for="card in getCardsById(this.id)"
+          :title="card.title"
+          :id="card.id"
+          :key="card.id"
+          :cardDescription="card.description"
+          :index="card.index"
+          :idCol="card.idCol"
+          :file="card.file"
+      />
+    </draggable>
     <b-button
         v-if="!showInput"
         variant="light"
@@ -63,40 +67,49 @@
 <script>
 import Card from "./Card";
 import {mapActions, mapGetters} from 'vuex';
+import draggable from "vuedraggable";
 
 export default {
   name: 'Column',
-  components: {
-    Card,
-  },
+  components: {Card, draggable},
   props: {
     id: Number,
-    index: Number,
+    index: String,
     title: String,
   },
   computed: {
-    ...mapGetters(['allCards', 'newCardIndex', 'getCardsById'])
-  },
-  async beforeMount() {
-    await this.fetchCards()
+    ...mapGetters(['allCards', 'updateStatus', 'newCardIndex',
+      'getCardsById']),
+    dragOptions() {
+      return {
+        animation: 0,
+        group: "cards",
+        disabled: this.updateStatus,
+        ghostClass: "ghost"
+      };
+    },
   },
   data() {
     return {
-      cards: [],
+      isDrag: false,
+      changedCard: {},
       cardName: '',
       colName: this.title,
       showInput: false,
+      editable: true,
     }
   },
   methods: {
     ...mapActions(['deleteCol', 'updateCol',
-      'fetchCards', 'createCard']),
+      'fetchCards', 'createCard', 'updateCard']),
     async update() {
-      await this.updateCol({
-        id: this.id,
-        title: this.colName,
-        index: this.index
-      })
+      if (this.$props.title !== this.colName)
+        if (!this.isDrag)
+          await this.updateCol({
+            id: this.id,
+            title: this.colName,
+            index: this.index + ""
+          })
     },
     async del() {
       await this.deleteCol(this.id)
@@ -109,13 +122,103 @@ export default {
         const newCard = {
           id: Date.now(),
           title: card,
-          index: this.newCardIndex,
+          index: this.newCardIndex + "",
           description: '',
           idCol: this.id,
         };
         return this.createCard(newCard)
       }
     },
+    sendInfo() {
+      this.isDrag = true
+      const info = {
+        id: this.id,
+        title: this.colName,
+        index: this.index
+      }
+      this.$emit('getDropped', info)
+    },
+    dropped(data) {
+      this.$store.state.changeCard = data
+      this.$store.state.oldCol = data.idCol
+    },
+    moveCard(data) {
+      this.$store.state.newIndex = data.newIndex
+      this.$store.state.oldIndex = data.oldIndex
+    },
+    minCardIndex(arr) {
+      if (arr.length === 0)
+        return 0.001
+      let min = +arr[0].index;
+      for (let i in arr) {
+        if (+arr[i].index < min)
+          min = +arr[i].index
+      }
+      return min;
+    },
+    maxCardIndex(arr) {
+      if (arr.length === 0)
+        return 0.001
+      let max = +arr[0].index;
+      for (let i in arr) {
+        if (+arr[i].index > max)
+          max = +arr[i].index
+      }
+      return max + 0.00001;
+    },
+    async newIdCol() {
+      this.isDrag = false;
+      let replaceIndex;
+      this.cards = this.getCardsById(this.id)
+      this.$store.state.newCol = this.id
+      const newPlace = this.$store.state.newIndex
+      const oldPlace = this.$store.state.oldIndex
+      const newColId = this.$store.state.newCol
+      const oldColId = this.$store.state.oldCol
+      if (newPlace === oldPlace && newColId === oldColId) {
+        return 0;
+      } else {
+        if (newPlace === oldPlace && newColId !== oldColId) {
+          if (newPlace === 0) {
+            replaceIndex = this.minCardIndex(this.getCardsById(this.id)) / 2
+          } else if (newPlace === this.getCardsById(this.id).length) {
+            replaceIndex = this.maxCardIndex(this.getCardsById(this.id))
+          } else {
+            try {
+              replaceIndex = (+this.getCardsById(this.id)[newPlace - 1].index + +this.getCardsById(this.id)[newPlace].index) / 2
+            } catch (e) {
+              return 0
+            }
+          }
+        } else if (newPlace !== oldPlace && newColId === oldColId) {
+          if (newPlace === 0) {
+            replaceIndex = this.minCardIndex(this.getCardsById(this.id)) / 2
+          } else if (newPlace === this.getCardsById(this.id).length - 1) {
+            replaceIndex = this.maxCardIndex(this.getCardsById(this.id))
+          } else if (newPlace < oldPlace) {
+            replaceIndex = (+this.getCardsById(this.id)[newPlace - 1].index + +this.getCardsById(this.id)[newPlace].index) / 2
+          } else if (newPlace > oldPlace) {
+            replaceIndex = (+this.getCardsById(this.id)[newPlace + 1].index + +this.getCardsById(this.id)[newPlace].index) / 2
+          }
+        } else if (newPlace !== oldPlace && newColId !== oldColId) {
+          if (newPlace === 0) {
+            replaceIndex = this.minCardIndex(this.getCardsById(this.id)) / 2
+          } else if (newPlace === this.getCardsById(this.id).length) {
+            replaceIndex = this.maxCardIndex(this.getCardsById(this.id))
+          } else {
+            replaceIndex = (+this.getCardsById(this.id)[newPlace - 1].index + +this.getCardsById(this.id)[newPlace].index) / 2
+          }
+        }
+        this.$store.state.changeCard.index = replaceIndex
+        await this.updateCard({
+          id: this.$store.state.changeCard.id,
+          title: this.$store.state.changeCard.title,
+          index: replaceIndex + "",
+          description: this.$store.state.changeCard.description,
+          idCol: this.id
+        })
+      }
+    }
   }
 }
 </script>
@@ -140,6 +243,12 @@ export default {
   background: black;
 }
 
+.drag {
+  margin-left: -15px;
+  min-height: 50px;
+  width: 17rem;
+}
+
 .cardHeader {
   width: 16rem;
   display: flex;
@@ -151,42 +260,46 @@ export default {
   width: 42px;
   margin-top: -14px;
   margin-right: -10px;
-  border-radius: 20px;
+  border-radius: 5px;
 }
 
 .colName {
-  width: 15rem;
+  width: 16rem;
   margin-bottom: 10px;
   margin-top: -15px;
   margin-left: -15px;
-  border-radius: 20px;
+  border-radius: 5px;
   border: none;
 }
 
 .column {
+  display: flex;
   height: fit-content;
   font-size: 1rem;
-  max-width: 18rem;
+  max-width: 19rem;
   max-height: 87vh;
   min-width: 18rem !important;
   overflow-y: auto;
   scroll-snap-type: x proximity;
-  border-radius: 20px;
+  border-radius: 5px;
 }
 
+.ghost {
+  opacity: 0;
+}
 
 .inputColumn {
-  border-radius: 20px;
+  border-radius: 5px;
   height: 40px;
   margin-top: 10px;
-  width: 16rem;
+  width: 17rem;
   margin-left: -15px;
 }
 
 .addCard {
-  border-radius: 20px;
+  border-radius: 5px;
   height: 40px;
-  width: 16rem;
+  width: 17rem;
   margin-left: -15px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="user">
     <div class="user">{{ username }}</div>
     <b-avatar :src="avatar" size="3rem"></b-avatar>
   </div>
@@ -15,13 +15,10 @@ export default {
 }
 </script>
 
-<style>
-div {
-  display: inline;
-  margin-right: 10px;
-}
-
+<style scoped>
 .user {
+  margin-right: 10px;
+  display: inline;
   color: ghostwhite;
 }
 </style>

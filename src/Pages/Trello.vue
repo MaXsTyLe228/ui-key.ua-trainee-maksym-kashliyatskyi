@@ -1,5 +1,5 @@
 <template>
-  <div id="trello">
+  <div class="trello">
     <Header/>
     <Board/>
   </div>
@@ -10,10 +10,10 @@ import Header from "../components/Header/Header";
 import Board from "../components/Board/Board";
 
 export default {
-  name: 'App',
+  name: 'Trello',
   components: {
     Header,
     Board,
-  }
+  },
 }
 </script>
